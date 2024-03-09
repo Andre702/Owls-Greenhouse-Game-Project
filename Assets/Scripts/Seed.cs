@@ -4,43 +4,46 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Seed : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class Seed : DragableItem
 {
-    public Vector3 screen_position;
     public Sprite seedSprite;
+    public string seedName;
 
-    private Transform originalSlot;
-    private CanvasGroup canvasGroup;
-    private bool locked = false;
+    private bool unlocked;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         seedSprite = GetComponent<Image>().sprite;
-        canvasGroup = GetComponent<CanvasGroup>();
-    }
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-        originalSlot = transform.parent; // remember original slot
-        transform.SetParent(transform.parent.parent.parent); // chage parent temporarily
-        // This does not look pretty but 3 parents up the seed should be just assigned to canvas
+        thisItemType = ItemType.Seed;
 
-        canvasGroup.blocksRaycasts = false;
-        canvasGroup.alpha = 0.6f;
-    }
+        canBeUsed = true; // Seeds need to check if they are unlocked at this game level
+                          // and then determine weather or not they can be used yet
 
-    public void OnDrag(PointerEventData eventData)
-    {
-        screen_position = Input.mousePosition;
-        screen_position.z = Camera.main.nearClipPlane + 8;
-        transform.position = Camera.main.ScreenToWorldPoint(screen_position);
+        pickupSound = "Hszz"; // Replace those with actual sounds xd
+        useSound = "Blink";
+
+        unlocked = true; // This will depend on the world script and state of the game
     }
 
-    public void OnEndDrag(PointerEventData eventData)
+    protected override void BeginDragEffect()
     {
-        transform.SetParent(originalSlot); // snap back
+        if (unlocked)
+        {
+            canBeUsed = true;
 
-        canvasGroup.blocksRaycasts = true;
+            canvasGroup.alpha = 0.6f;
+        }
+        else
+        {
+            canBeUsed = false;
+        }
+        base.BeginDragEffect();
+    }
+
+    protected override void EndDragEffect()
+    {
         canvasGroup.alpha = 1;
+        base.EndDragEffect();
     }
-
 }
