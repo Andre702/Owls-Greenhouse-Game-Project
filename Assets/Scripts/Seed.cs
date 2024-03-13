@@ -4,10 +4,17 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+public enum PlantName
+{
+    Sunflower,
+    Sprillia,
+    Hartleaf
+}
+
 public class Seed : DragableItem
 {
     public Sprite seedSprite;
-    public string seedName;
+    public PlantName plantName;
 
     private bool unlocked;
 
@@ -24,6 +31,13 @@ public class Seed : DragableItem
         useSound = "Blink";
 
         unlocked = true; // This will depend on the world script and state of the game
+    }
+
+    private void Start()
+    {
+        // plant name depends on where you put it.
+        // The order of seeds should be the same as the order of plant names in the enum
+        plantName = (PlantName)transform.parent.transform.GetSiblingIndex();
     }
 
     protected override void BeginDragEffect()

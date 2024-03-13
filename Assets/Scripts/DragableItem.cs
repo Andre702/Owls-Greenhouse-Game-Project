@@ -19,7 +19,7 @@ public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     public Sprite ogParentSprite;
     public Sprite hlParentSprite;
 
-    private Transform ogParent; 
+    protected Transform ogParent; 
     protected CanvasGroup canvasGroup;
     protected string pickupSound;
     protected string useSound;
@@ -64,23 +64,15 @@ public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         }
     }
 
-    public void EndUseItem(bool wasUsed ) // Executed by the interacted space when the item has been dropped on it
-    {
-        if (wasUsed)
-        {
-            Debug.Log("Play sound" + useSound);
-        }
-    }
-
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("MOUSE ON!");
+        //Debug.Log("MOUSE ON!");
         ogParent.GetComponent<Image>().sprite = hlParentSprite;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        Debug.Log("MOUSE OFF!");
+        //Debug.Log("MOUSE OFF!");
         ogParent.GetComponent<Image>().sprite = ogParentSprite;
     }
 
@@ -101,5 +93,13 @@ public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     protected virtual void EndDragEffect() // Executes at the end of Dragging, can be overridden by Dragable objects
     {
 
+    }
+
+    public virtual void EndUseItem(bool wasUsed) // Executed by the interacted space when the item has been dropped on it
+    {
+        if (wasUsed)
+        {
+            Debug.Log("Play sound" + useSound);
+        }
     }
 }

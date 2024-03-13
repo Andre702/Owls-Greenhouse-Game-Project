@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Water : DragableItem
 {
     public Sprite wateringCanSprite;
-    public int waterLevel = 100;
+    public float waterLevel = 100;
 
     private Image wateringCanImage;
     private Vector2 wateringCanDimensions;
@@ -29,6 +29,8 @@ public class Water : DragableItem
 
         pickupSound = "Flop"; // Replace those with actual sounds xd
         useSound = "Flush";
+
+        updateWaterLevel();
 
     }
 
@@ -55,6 +57,24 @@ public class Water : DragableItem
     {
         canvasGroup.alpha = 0;
         base.EndDragEffect();
+    }
+
+    public override void EndUseItem(bool wasUsed)
+    {
+        base.EndUseItem(wasUsed);
+
+        if (wasUsed)
+        {
+            waterLevel -= 20;
+            updateWaterLevel();
+        }
+    }
+
+    private void updateWaterLevel()
+    {
+        float waterPercentage = waterLevel / 100f;
+        Debug.Log(waterLevel / 100);
+        GameObject.Find("WaterLevel").transform.localScale = new Vector3(1, waterPercentage, 1);
     }
 
 }
