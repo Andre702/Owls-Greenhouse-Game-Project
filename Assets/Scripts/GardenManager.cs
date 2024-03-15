@@ -1,97 +1,39 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DataBase;
+using System.Reflection;
+using System;
 
 public class GardenManager : MonoBehaviour
 {
-    public static GardenManager instance;
-
-    private GameData gameData;
+    public static GardenManager instance { get; private set; }
 
     private void Awake()
     {
-        // found this solution online. Should ensure that the instance of GardenManager is always present.
-        if (instance == null)
+        if (instance != null && instance != this)
         {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        } else
-        {
-            Destroy(gameObject);
+            Destroy(this);
+            return;
         }
 
-        LoadGardenData();
-    }
-
-    // Data will be saved in PlayerPrefs. It has 1MB of storage avaliable.
-
-    public void LoadGardenData()
-    {
-        string jsonData = PlayerPrefs.GetString("GameData");
-        if (!string.IsNullOrEmpty(jsonData))
-        {
-            gameData = JsonUtility.FromJson<GameData>(jsonData);
-        }
-        else
-        {
-            gameData = new GameData();
-        }
-        
-    }
-
-    public void SaveGardenData()
-    {
-        string jsonData = JsonUtility.ToJson(gameData);
-        PlayerPrefs.SetString("GameData", jsonData);
-        PlayerPrefs.Save();
-    }
-
-    public PlantData GetPlantData (int plantIndex)
-    {
-        return gameData.plantStates[plantIndex];
-    }
-
-    public void SetPlant (int plantIndex, PlantName name, int growthState)
-    {
-        gameData.plantStates[plantIndex] = new PlantData(name, growthState);
-        SaveGardenData();
+        instance = this;
     }
 
     public void DigPlant(int index)
     {
-        if (index >= 0 && index < gameData.plantStates.Length)
-        {
-            gameData.plantStates[index] = null;
-        }
+        GameData.instance.DeletePlantData(index);
+        // do something with dug plant here
     }
 
-    public void PrintAllPlantData()
+    public void PlantPlant(int index, PlantName name)
     {
-        string allPlantDataString = "All Plant Data [click to view]:\n";
-
-        for (int i = 0; i < gameData.plantStates.Length; i++)
-        {
-            PlantData plantData = gameData.plantStates[i];
-
-            if (plantData != null)
-            {
-                allPlantDataString += "Plant " + i + ": Name - " + plantData.plantName + ", Growth State - " + plantData.growthState + "\n";
-            }
-            else
-            {
-                allPlantDataString += "Plant " + i + ": Empty\n";
-            }
-        }
-
-        Debug.Log(allPlantDataString);
+        GameData.instance.SetPlantData(index, name, 0, 0);
     }
 
-    public void NextHour()
+    public void GrowAll()
     {
-        for (int i =0; i < gameData.plantStates.Length; i++)
-        {
-            gameData.plantStates[i].Grow();
-        }
+        
 
         // Change hour in timer
         // Check for end of the day

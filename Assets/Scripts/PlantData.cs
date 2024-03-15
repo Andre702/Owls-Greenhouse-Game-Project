@@ -5,26 +5,32 @@ using UnityEngine;
 public class PlantData
 {
     public PlantName plantName;
-    public float growthState;
+    public int growthState;
+    public int health;
+    public bool isHappy;
 
-    public PlantData(PlantName name, int state)
+    public PlantData(PlantName name, int state, int hp, bool happy)
     {
         plantName = name;
         growthState = state;
+        health = hp;
+        isHappy = happy;
     }
 
-    public PlantName GetPlantName()
+    public void Grow(int? growth = null)
     {
-        return plantName;
+        if (growth == null)
+        {
+            growthState += 1;
+        }
+        else
+        {
+            growthState += growth.Value;
+        }
     }
 
-    public float GetGrowthState()
+    public override string ToString()
     {
-        return growthState;
-    }
-
-    public void Grow()
-    {
-        growthState += 1;
+        return $"(Name: {plantName}, Growth: {growthState}, HP: {health}, Happy: {isHappy})";
     }
 }
