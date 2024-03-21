@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DataBase;
-using System.Reflection;
 using System;
-using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class GardenManager : MonoBehaviour
 {
@@ -74,5 +73,10 @@ public class GardenManager : MonoBehaviour
         
     }
 
-    
+    public void GoForest()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
+
 }
