@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Greenhouse.unity
     guid: 8b7fa068c127b81438fcf16494d8edb7
+  - enabled: 1
+    path: Assets/Scenes/Forest.unity
+    guid: e672710f0f73ea04693b0ba7d1d840d5
   m_configObjects: {}
