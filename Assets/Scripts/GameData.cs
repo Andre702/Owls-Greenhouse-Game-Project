@@ -18,12 +18,19 @@ namespace DataBase
 
             instance = this;
             DontDestroyOnLoad(gameObject);
-
         }
 
-        private PlantData[] plantStates = new PlantData[6];
+        private Plant[] plantStates = new Plant[6];
 
-        public PlantData GetPlantData(int index)
+        private void Start()
+        {
+            for (int i = 0; i < plantStates.Length; i++)
+            {
+                plantStates[i] = new Plant(PlantName.EMPTY, 0, 0);
+            }
+        }
+
+        public Plant GetPlantData(int index)
         {
             if (index >= 0 && index < plantStates.Length)
             {
@@ -36,35 +43,15 @@ namespace DataBase
             }
         }
 
-        public void SetPlantData(int index, PlantName name, int growthState, int hp, bool isHappy = true)
+        public void SetPlantData(int index, Plant data)
         {
             if (index >= 0 && index < plantStates.Length)
             {
-                plantStates[index] = new PlantData(name, growthState, hp, isHappy);
+                plantStates[index] = data;
             }
             else
             {
                 Debug.LogError("Invalid plant index.");
-            }
-        }
-
-        public void PlantWither(int index)
-        {
-            if (index >= 0 && index < plantStates.Length)
-            {
-                plantStates[index].health += 1;
-            }
-            else
-            {
-                Debug.LogError("Invalid plant index.");
-            }
-        }
-
-        public void AllPlantsGrow(int? growth = null)
-        {
-            for (int i = 0; i < plantStates.Length; i++)
-            {
-                plantStates[i].Grow(growth);
             }
         }
 
@@ -72,12 +59,17 @@ namespace DataBase
         {
             if (index >= 0 && index < plantStates.Length)
             {
-                plantStates[index] = null;
+                plantStates[index] = new Plant(PlantName.EMPTY, 0, 0);
             }
             else
             {
                 Debug.LogError("Invalid plant index.");
             }
+        }
+
+        public Plant[] GetAllPlants()
+        {
+            return plantStates;
         }
 
         public void PrintAllPlantsData()

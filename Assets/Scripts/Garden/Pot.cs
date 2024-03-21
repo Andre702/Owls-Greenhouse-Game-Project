@@ -9,8 +9,8 @@ public class Pot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerEx
 {
     public Sprite ogSprite;
     public Sprite hlSprite;
+    public Transform potPlantIcon;
 
-    private Image potPlantIcon;
     private int potIndex;
     private bool isEmpty = true;
 
@@ -43,14 +43,12 @@ public class Pot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerEx
                     if (isEmpty)
                     {
                         Seed seed = (Seed)itemReference;
-                        CreatePlant(seed.plantName);
+                        CreatePlant(seed.plantName); // instatiate a new object (might cause lag, will think of another method to do that - maybe an invisible plant switching sprites?)
                         GardenManager.instance.PlantPlant(potIndex, seed.plantName);
 
-                        potPlantIcon = transform.Find("Icon").GetComponent<Image>();
-                        potPlantIcon.sprite = seed.seedSprite;
-                        potPlantIcon.color = new Color(130f / 255f, 40f / 255f, 0f / 255f, 160f / 255f);
-
-
+                        Image plantIcon = potPlantIcon.GetComponent<Image>();
+                        plantIcon.sprite = seed.seedSprite;
+                        plantIcon.color = new Color(130f / 255f, 40f / 255f, 0f / 255f, 160f / 255f);
 
                         seed.EndUseItem(true);
                         break;
@@ -79,17 +77,17 @@ public class Pot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerEx
 
     private void CreatePlant(PlantName name)
     {
-        GameObject plantPrefab = Resources.Load<GameObject>(name.ToString());
+        //GameObject plantPrefab = Resources.Load<GameObject>(name.ToString());
 
-        if (plantPrefab == null)
-        {
-            Debug.Log("Could not find plant prefab named: " + name.ToString());
-        }
-        else
-        {
-            Debug.Log("Trying to instantiate object from prefab: " + name.ToString());
-            GameObject newPlant = Instantiate(plantPrefab, this.transform, false);
-            newPlant.transform.SetParent(this.transform);
-        }
+        //if (plantPrefab == null)
+        //{
+        //    Debug.Log("Could not find plant prefab named: " + name.ToString());
+        //}
+        //else
+        //{
+        //    Debug.Log("Trying to instantiate object from prefab: " + name.ToString());
+        //    GameObject newPlant = Instantiate(plantPrefab, this.transform, false);
+        //    newPlant.transform.SetParent(this.transform);
+        //}
     }
 }

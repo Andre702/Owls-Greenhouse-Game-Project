@@ -12,7 +12,7 @@ public enum ItemType
 
 public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    public Vector3 screen_position;
+    public Vector3 screenPosition;
     public ItemType thisItemType { get; protected set; }
     [HideInInspector]
     public bool canBeUsed = true;
@@ -46,9 +46,9 @@ public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     {
         if (canBeUsed)
         {
-            screen_position = Input.mousePosition;
-            screen_position.z = Camera.main.nearClipPlane + 8;
-            transform.position = Camera.main.ScreenToWorldPoint(screen_position);
+            screenPosition = Input.mousePosition;
+            screenPosition.z = Camera.main.nearClipPlane + 8;
+            transform.position = Camera.main.ScreenToWorldPoint(screenPosition);
         }
     }
 
