@@ -4,29 +4,32 @@ using UnityEngine;
 
 public class Sprillia : Plant
 {
-    public Sprillia() : base()
+    public Sprillia(int _index) : base(_index)
     {
         plantName = PlantName.Sprillia;
-        growthState = 0;
-        health = 3;
+        plantAge = 0;
+        plantHealth = 3;
         isHappy = true;
     }
 
-    public override void GrowEffect(int growState)
+    public override void GrowEffectList()
     {
-        switch (growState)
+        switch (plantAge)
         {
             case 3:
-                //Need water?
+                IncrementStage();
                 break;
-            case 7:
-                //water again?
+            case 5:
+                IncrementStage();
+                break;
+            case 8:
+                IncrementStage();
                 break;
             case 10:
-                // maybe mowe?
+                IncrementStage();
                 break;
-            case 12:
-                // ready to harvest?
+            case 13:
+                IncrementStage();
                 break;
             default:
                 //nothing special happens

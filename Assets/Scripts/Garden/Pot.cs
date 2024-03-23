@@ -10,8 +10,9 @@ public class Pot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerEx
     public Sprite ogSprite;
     public Sprite hlSprite;
     public Transform potPlantIcon;
+    public PlantImage potPlantImage;
+    public int potIndex;
 
-    private int potIndex;
     private bool isEmpty = true;
 
     private void Awake()
@@ -19,11 +20,6 @@ public class Pot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerEx
         GetComponent<Image>().sprite = ogSprite;
     }
 
-    private void Start()
-    {
-        // putting it in start just in case Unity is not done initializing indices in Awake.
-        potIndex = transform.GetSiblingIndex();
-    }
     public void OnDrop(PointerEventData eventData)
     {
         GameObject dropped = eventData.pointerDrag;
@@ -43,7 +39,6 @@ public class Pot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerEx
                     if (isEmpty)
                     {
                         Seed seed = (Seed)itemReference;
-                        CreatePlant(seed.plantName); // instatiate a new object (might cause lag, will think of another method to do that - maybe an invisible plant switching sprites?)
                         GardenManager.instance.PlantPlant(potIndex, seed.plantName);
 
                         Image plantIcon = potPlantIcon.GetComponent<Image>();
@@ -73,21 +68,5 @@ public class Pot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerEx
     public void OnPointerExit(PointerEventData eventData)
     {
         GetComponent<Image>().sprite = ogSprite;
-    }
-
-    private void CreatePlant(PlantName name)
-    {
-        //GameObject plantPrefab = Resources.Load<GameObject>(name.ToString());
-
-        //if (plantPrefab == null)
-        //{
-        //    Debug.Log("Could not find plant prefab named: " + name.ToString());
-        //}
-        //else
-        //{
-        //    Debug.Log("Trying to instantiate object from prefab: " + name.ToString());
-        //    GameObject newPlant = Instantiate(plantPrefab, this.transform, false);
-        //    newPlant.transform.SetParent(this.transform);
-        //}
     }
 }

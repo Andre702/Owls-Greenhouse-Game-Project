@@ -4,29 +4,32 @@ using UnityEngine;
 
 public class Hartleaf : Plant
 {
-    public Hartleaf() : base()
+    public Hartleaf(int _index) : base(_index)
     {
         plantName = PlantName.Hartleaf;
-        growthState = 0;
-        health = 5;
+        plantAge = 0;
+        plantHealth = 5;
         isHappy = true;
     }
 
-    public override void GrowEffect(int growState)
+    public override void GrowEffectList()
     {
-        switch (growState)
+        switch (plantAge)
         {
             case 3:
-                //Need water?
+                IncrementStage();
                 break;
-            case 7:
-                //water again?
+            case 6:
+                IncrementStage();
                 break;
             case 10:
-                // maybe mowe?
+                IncrementStage();
                 break;
             case 12:
-                // ready to harvest?
+                IncrementStage();
+                break;
+            case 14:
+                IncrementStage();
                 break;
             default:
                 //nothing special happens

@@ -4,29 +4,32 @@ using UnityEngine;
 
 public class Sunflower : Plant
 {
-    public Sunflower() : base()
+    public Sunflower(int _index) : base(_index)
     {
         plantName = PlantName.Sunflower;
-        growthState = 0;
-        health = 4;
+        plantAge = 0;
+        plantHealth = 4;
         isHappy = true;
     }
 
-    public override void GrowEffect(int growState)
+    public override void GrowEffectList()
     {
-        switch (growState)
+        switch (plantAge)
         {
-            case 3:
-                //Need water?
+            case 2:
+                IncrementStage();
                 break;
-            case 7:
-                //water again?
+            case 4:
+                IncrementStage();
+                break;
+            case 6:
+                IncrementStage();
+                break;
+            case 8:
+                IncrementStage();
                 break;
             case 10:
-                // maybe mowe?
-                break;
-            case 12:
-                // ready to harvest?
+                IncrementStage();
                 break;
             default:
                 //nothing special happens
