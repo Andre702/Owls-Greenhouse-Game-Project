@@ -28,17 +28,15 @@ public class Seed : DragableItem
 
     protected override void BeginDragEffect()
     {
-        if (unlocked)
-        {
-            canBeUsed = true;
+        base.BeginDragEffect();
 
+        if (canBeUsed & unlocked)
+        {
             canvasGroup.alpha = 0.6f;
         }
-        else
-        {
-            canBeUsed = false;
-        }
-        base.BeginDragEffect();
+
+        BeginDragResult();
+        
     }
 
     protected override void EndDragEffect()

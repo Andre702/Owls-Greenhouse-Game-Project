@@ -12,6 +12,10 @@ public class GardenManager : MonoBehaviour
 
     public Transform[] pots;
 
+    public (bool, bool, Plant, int) cursor;
+    // right now it is: isFull, isQuestion, Plant carying, index of the plant
+    public Transform cursorImage;
+    
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -28,10 +32,18 @@ public class GardenManager : MonoBehaviour
         PlantAllVisualUpdate();
     }
 
+    public void ClearCursor()
+    {
+        cursor = (false, false, null, -1);
+    }
+
     public void PlantDigUp(int index)
     {
+        cursor = (true, false, GameData.instance.GetPlantData(index), index);
+        cursorImage.GetComponent<GreenhouseCursor>().EnableCursor(0);
         GameData.instance.DeletePlantData(index);
         pots[index].GetChild(1).GetComponent<PlantImage>().DisablePlant();
+
     }
     // Updates Plant data on GameData (Uses DeletePlantData).
     // Disables PlantImage (Uses EnablePlant of PlantImage on specified index position).

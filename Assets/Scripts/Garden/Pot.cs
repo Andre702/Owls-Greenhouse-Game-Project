@@ -36,9 +36,10 @@ public class Pot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerEx
                     break;
                 
                 case ItemType.Seed:
+                    Seed seed = (Seed)itemReference;
                     if (isEmpty)
                     {
-                        Seed seed = (Seed)itemReference;
+                        isEmpty = false;
                         GardenManager.instance.PlantPlant(potIndex, seed.plantName);
 
                         Image plantIcon = potPlantIcon.GetComponent<Image>();
@@ -48,6 +49,7 @@ public class Pot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerEx
                         seed.EndUseItem(true);
                         break;
                     }
+                    seed.EndUseItem(false);
                     break;
 
                 case ItemType.Water:
@@ -56,6 +58,22 @@ public class Pot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerEx
                     // This will require a plant object as a child of the Pot.
                     water.EndUseItem(true);
                     break;
+
+                case ItemType.Shovel:
+                    Shovel shovel = (Shovel)itemReference;
+                    if (!isEmpty)
+                    {
+                        GardenManager.instance.PlantDigUp(potIndex);
+                        isEmpty = true;
+
+                        Image plantIcon = potPlantIcon.GetComponent<Image>();
+                        plantIcon.sprite = null;
+                        plantIcon.color = new Color(0f / 0f, 0f / 0f, 0f / 0f, 0f / 0f);
+                        break;
+                    }
+                    shovel.EndUseItem(false);
+                    break;
+
             }
         }
     }

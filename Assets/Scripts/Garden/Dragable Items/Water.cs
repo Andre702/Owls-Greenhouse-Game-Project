@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class Water : DragableItem
 {
-    public Sprite wateringCanSprite;
     public float waterLevel = 100;
 
     private Image wateringCanImage;
@@ -36,21 +35,16 @@ public class Water : DragableItem
 
     protected override void BeginDragEffect()
     {
-        if (waterLevel < 10)    
-        { 
-            canBeUsed = false; 
-        }
-        else                    
-        { 
-            canBeUsed = true;
+        base.BeginDragEffect();
 
+        if (canBeUsed & waterLevel > 10)    
+        {
             RectTransform rectTransform = wateringCanImage.rectTransform;
             rectTransform.sizeDelta = wateringCanDimensions;
             canvasGroup.alpha = 1;
-
         }
 
-        base.BeginDragEffect();
+        BeginDragResult();
     }
 
     protected override void EndDragEffect()

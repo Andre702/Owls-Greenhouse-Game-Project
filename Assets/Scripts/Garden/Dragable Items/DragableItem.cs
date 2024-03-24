@@ -7,7 +7,8 @@ using UnityEngine.UI;
 public enum ItemType
 {
     Seed,
-    Water
+    Water,
+    Shovel
 }
 
 public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
@@ -80,15 +81,25 @@ public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     protected virtual void BeginDragEffect() // Executes at the beginnin of Dragging, can be overridden by Dragable objects
     {
-        if (canBeUsed) 
+        if (GardenManager.instance.cursor.Item1)
         {
-            Debug.Log("Play sound" + pickupSound); 
+            canBeUsed = false;
+            Debug.Log("Hand full");
         }
-        else 
-        { 
+        else { canBeUsed = true; }
+    } 
+    
+    protected void BeginDragResult()
+    {
+        if (canBeUsed)
+        {
+            Debug.Log("Play sound" + pickupSound);
+        }
+        else
+        {
             Debug.Log("This " + thisItemType + " can not be used.");
         }
-    } 
+    }
 
     protected virtual void EndDragEffect() // Executes at the end of Dragging, can be overridden by Dragable objects
     {
@@ -100,6 +111,10 @@ public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         if (wasUsed)
         {
             Debug.Log("Play sound" + useSound);
+        }
+        else
+        {
+            // we can make owl say something here
         }
     }
 }
