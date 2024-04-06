@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class PlantImage : MonoBehaviour
 {
     private Sprite[] spriteSheet;
-    private bool waterIconOn = false;
 
     public void EnablePlant(Sprite[] _spriteSheet, bool isHappy, int stage = 0) 
     {
@@ -14,7 +13,7 @@ public class PlantImage : MonoBehaviour
         {
             spriteSheet = _spriteSheet;
             UpdateCurrentSprite(stage, isHappy);
-            gameObject.SetActive(isHappy);
+            gameObject.SetActive(true);
         }
         else
         {
@@ -26,12 +25,8 @@ public class PlantImage : MonoBehaviour
 
     public void UpdateCurrentSprite(int stage, bool isHappy)
     {
-        if (isHappy != waterIconOn)
-        {
-            waterIconOn = isHappy;
 
-            transform.GetChild(0).gameObject.SetActive(!isHappy);
-        }
+        transform.GetChild(0).gameObject.SetActive(!isHappy);
 
         if (spriteSheet != null)
         {

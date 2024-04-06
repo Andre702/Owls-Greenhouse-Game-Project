@@ -10,6 +10,7 @@ public class Sunflower : Plant
         plantAge = 0;
         plantHealth = 4;
         isHappy = true;
+        stage = 0;
     }
 
     public override void GrowEffectList()

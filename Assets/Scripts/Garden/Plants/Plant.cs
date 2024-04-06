@@ -22,10 +22,10 @@ public class Plant
     public int stage; // describes sprite number which plant should be displayed as:
                       // * usually plants have 7 stages of life from -1 to 5, where:
                       // -1 means empty
-                      // 0 means sappling
+                      // 0 means sappling or default
                       // 5 (or last stage) means fully grown
 
-    public Plant(PlantName name, int age, int _health, int _index, bool _ishappy = true, int _stage = 0)
+    public Plant(PlantName name, int age, int _health, int _index, int _stage = -1, bool _ishappy = true)
     {
         plantName = name;
         plantAge = age;
@@ -71,7 +71,7 @@ public class Plant
 
     public void KillPlant()
     {
-        stage = -1;
+        stage = 0;
         isHappy = true;
         plantName = PlantName.DEAD;
     }
@@ -90,11 +90,11 @@ public class Plant
 
     public void UpdateVisuals()
     {
-        GardenManager.instance.PlantVisualChange(index, stage, isHappy);
+        GardenManager.instance.PlantVisualChange(this);
     }
 
     public override string ToString()
     {
-        return $"(Name: {plantName}, Growth: {plantAge}, HP: {plantHealth}, Happy: {isHappy})";
+        return $"(Name: {plantName}, Age: {plantAge}, Stage: {stage}, HP: {plantHealth}, Happy: {isHappy})";
     }
 }

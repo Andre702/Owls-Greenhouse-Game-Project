@@ -10,6 +10,7 @@ public class Hartleaf : Plant
         plantAge = 0;
         plantHealth = 5;
         isHappy = true;
+        stage = 0;
     }
 
     public override void GrowEffectList()

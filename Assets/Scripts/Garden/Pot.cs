@@ -91,10 +91,13 @@ public class Pot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerEx
     public void OnPointerEnter(PointerEventData eventData)
     {
         GetComponent<Image>().sprite = hlSprite;
+        GardenManager.instance.cursor.target = potIndex;
+        
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         GetComponent<Image>().sprite = ogSprite;
+        GardenManager.instance.cursor.target = -1;
     }
 }

@@ -11,8 +11,8 @@ public class GardenManager : MonoBehaviour
     public static GardenManager instance { get; private set; }
 
     public Transform[] pots;
-    public (bool, bool, Plant, int) cursor;
-    // right now it is: isFull, isQuestion, Plant carying, index of the plant
+    public (bool isFull, bool isQuestion, Plant plant, int target) cursor;
+    // right now it is: isFull, isQuestion, Plant carying, index of the target hovered over , 
     public Transform cursorImage;
     public Transform waterContainer;
     
@@ -34,14 +34,22 @@ public class GardenManager : MonoBehaviour
 
     public void PlantDigUp(int index)
     {
-        cursor = (true, false, GameData.instance.GetPlantData(index), index);
-        cursorImage.GetComponent<GreenhouseCursor>().EnableCursor(0);
+        cursor = (true, false, GameData.instance.GetPlantData(index), -1);
+        if (cursor.plant.plantName != PlantName.DEAD)
+        {
+            cursorImage.GetComponent<GreenhouseCursor>().EnableCursor(0);
+        }
+        else
+        {
+            CursorClear();
+        }
         GameData.instance.DeletePlantData(index);
+        pots[index].GetComponent<Pot>().RemovePlant();
         pots[index].GetChild(1).GetComponent<PlantImage>().DisablePlant();
+
     }
     // Updates Plant data on GameData (Uses DeletePlantData).
     // Disables PlantImage (Uses EnablePlant of PlantImage on specified index position).
-
 
     public void PlantHealthDown(int index)
     {
@@ -82,21 +90,21 @@ public class GardenManager : MonoBehaviour
     // Updates Plant data on GameData by switch based on plantName (Uses SetPlantData).
     // Sets sprite sheet for a PlantImage (Uses EnablePlant of PlantImage on specified index position).
 
-    public void PlantVisualChange(int index, int stage, bool isHappy)
+    public void PlantVisualChange(Plant plant)
     {
-        PlantImage plantTarget = pots[index].GetChild(1).GetComponent<PlantImage>();
-        if (stage < 0)
+        PlantImage plantImageTarget = pots[plant.index].GetChild(1).GetComponent<PlantImage>();
+        if (plant.stage >= 0)
         {
-            //Debug.Log("Plant nr " + index + " - " + GameData.instance.GetPlantData(index).plantName + " has withered.");
-            Sprite deadPlant = GameData.instance.GetPlantGraphicsByName(PlantName.DEAD).spriteSheet[0];
-            plantTarget.ChangeImageToDead(deadPlant);
+            if (plant.plantName == PlantName.DEAD)
+            {
+                Sprite deadPlant = GameData.instance.GetPlantGraphicsByName(PlantName.DEAD).spriteSheet[0];
+                plantImageTarget.ChangeImageToDead(deadPlant);
+            }
+            else
+            {
+                plantImageTarget.UpdateCurrentSprite(plant.stage, plant.isHappy);
+            }
         }
-        else
-        {
-            //Debug.Log("Plant nr " + index + " - " + GameData.instance.GetPlantData(index).plantName + " has grown to new stage.");
-            plantTarget.UpdateCurrentSprite(stage, isHappy);
-        }
-        
     }
     // Changes sprite of PlantImage which is already enabled in specified index (Uses either:
     // ChangeImageToDead - if the plant is dead or,
@@ -109,17 +117,8 @@ public class GardenManager : MonoBehaviour
             Plant plant = GameData.instance.GetPlantData(i);
             (Sprite[] spriteSheet, Sprite icon) plantGraphics = GameData.instance.GetPlantGraphicsByName(plant.plantName);
 
-            if (plant.stage < 0)
-            {
-                pots[i].GetChild(1).GetComponent<PlantImage>().EnablePlant(plantGraphics.spriteSheet, true, 0);
-                pots[i].GetComponent<Pot>().PlantPlant(plantGraphics.icon);
-            }
-            else
-            {
-                pots[i].GetChild(1).GetComponent<PlantImage>().EnablePlant(plantGraphics.spriteSheet, plant.isHappy, plant.stage);
-                pots[i].GetComponent<Pot>().PlantPlant(plantGraphics.icon);
-            }
-            
+            pots[i].GetChild(1).GetComponent<PlantImage>().EnablePlant(plantGraphics.spriteSheet, plant.isHappy, plant.stage);
+            pots[i].GetComponent<Pot>().PlantPlant(plantGraphics.icon);
         }
     }
 
@@ -127,7 +126,27 @@ public class GardenManager : MonoBehaviour
     {
         return GameData.instance.GetPlantData(index).AttemptToWater();
     }
-    public void ClearCursor()
+
+    public bool PlantAtemptRelocate()
+    {
+        if (cursor.target < 0)
+        {
+            Debug.Log("Cursor not over pot");
+            return false;
+        }
+        cursor.plant.index = cursor.target;
+
+        Debug.Log(cursor.plant.ToString());
+        GameData.instance.SetPlantData(cursor.target, cursor.plant);
+        (Sprite[] spriteSheet, Sprite icon) plantGraphics = GameData.instance.GetPlantGraphicsByName(cursor.plant.plantName);
+        pots[cursor.target].GetChild(1).GetComponent<PlantImage>().EnablePlant(plantGraphics.spriteSheet, cursor.plant.isHappy, cursor.plant.stage);
+        pots[cursor.target].GetComponent<Pot>().PlantPlant(plantGraphics.icon);
+
+        return true;
+
+    }
+
+    public void CursorClear()
     {
         cursor = (false, false, null, -1);
     }

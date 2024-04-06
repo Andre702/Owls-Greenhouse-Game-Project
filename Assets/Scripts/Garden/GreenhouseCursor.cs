@@ -26,11 +26,19 @@ public class GreenhouseCursor : MonoBehaviour
             DisableCursor();
             return;
         }
+        else if (Input.GetMouseButtonDown(0))
+        {
+            if (GardenManager.instance.PlantAtemptRelocate())
+            {
+                DisableCursor();
+                return;
+            }
+        }
     }
 
     public void DisableCursor()
     {
-        GardenManager.instance.ClearCursor();
+        GardenManager.instance.CursorClear();
         gameObject.SetActive(false);
     }
 }
