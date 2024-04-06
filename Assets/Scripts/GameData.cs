@@ -9,15 +9,6 @@ namespace DataBase
     {
         public static GameData instance { get; private set; }
 
-        public Sprite[] sunflowerSheet;
-        public Sprite[] sprilliaSheet;
-        public Sprite[] hartleafSheet;
-        public Sprite[] deadPlant;
-
-        private Dictionary<PlantName, Sprite[]> plantImageMap = new Dictionary<PlantName, Sprite[]>();
-        private Plant[] plantStates = new Plant[7];
-        private int hour;
-
         private void Awake()
         {
             if (instance != null && instance != this)
@@ -34,16 +25,36 @@ namespace DataBase
                 plantStates[i] = new Plant(PlantName.EMPTY, 0, 0, i);
             }
 
-            plantImageMap.Add(PlantName.UNKNOWN, null);
-            plantImageMap.Add(PlantName.EMPTY, null);
-            plantImageMap.Add(PlantName.DEAD, deadPlant);
-            plantImageMap.Add(PlantName.Sunflower, sunflowerSheet);
-            plantImageMap.Add(PlantName.Sprillia, sprilliaSheet);
-            plantImageMap.Add(PlantName.Hartleaf, hartleafSheet);
+            plantImageMap.Add(PlantName.UNKNOWN, (null, null));
+            plantImageMap.Add(PlantName.EMPTY, (null, null));
+            plantImageMap.Add(PlantName.DEAD, (deadPlant, null));
+            plantImageMap.Add(PlantName.Sunflower, (sunflowerSheet, plantIcons[0]));
+            plantImageMap.Add(PlantName.Sprillia, (sprilliaSheet, plantIcons[1]));
+            plantImageMap.Add(PlantName.Hartleaf, (hartleafSheet, plantIcons[2]));
 
             hour = 1;
         }
 
+        private void Update()
+        {
+            if (timeIsFlowing)
+            {
+                currentTime += Time.deltaTime;
+                hour += (int)((currentTime * secondsInHour) % secondsInHour);
+            }
+            // connect this time to either GardenManager or more likely to a new class like PlantGrowthCOntroller
+        }
+
+        #region Plant related ============================================================================================
+
+        public Sprite[] sunflowerSheet;
+        public Sprite[] sprilliaSheet;
+        public Sprite[] hartleafSheet;
+        public Sprite[] deadPlant;
+        public Sprite[] plantIcons;
+
+        private Dictionary<PlantName, (Sprite[], Sprite)> plantImageMap = new Dictionary<PlantName, (Sprite[], Sprite)>();
+        private Plant[] plantStates = new Plant[7];
 
         public Plant GetPlantData(int index)
         {
@@ -87,9 +98,9 @@ namespace DataBase
             return plantStates;
         }
 
-        public Sprite[] GetPlantSpriteByName(PlantName name)
+        public (Sprite[] spriteSheet, Sprite icon) GetPlantGraphicsByName(PlantName name)
         {
-            Sprite[] sprite;
+            (Sprite[] spriteSheet, Sprite icon) sprite;
             if (plantImageMap.TryGetValue(name, out sprite))
             {
                 return sprite;
@@ -97,7 +108,7 @@ namespace DataBase
             else
             {
                 Debug.LogWarning($"Sprite not found for plant: {name}");
-                return null;
+                return (null, null);
             }
         }
 
@@ -110,10 +121,32 @@ namespace DataBase
             }
             Debug.Log(allPlantDataString);
         }
+        #endregion 
+
+
+        #region Time related ============================================================================================
+
+        public float secondsInHour = 10;
+
+        private int hour;
+        private bool timeIsFlowing = false;
+        private float currentTime = 0f;
+        
 
         public int GetHour()
         {
             return hour;
+        }
+        
+        public void StartTime()
+        {
+            timeIsFlowing = true;
+        }
+
+        public void StopTime()
+        {
+            timeIsFlowing = false;
+            currentTime = 0;
         }
 
         public void IncrementHour()
@@ -121,6 +154,8 @@ namespace DataBase
             hour += 1;
         }
 
+
+        #endregion
         // time, hour, water level needs to be added here probably
 
 

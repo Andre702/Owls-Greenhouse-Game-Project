@@ -21,7 +21,7 @@ public class Plant
     public bool isHappy; // describes if plant should recieve damage this turn
     public int stage; // describes sprite number which plant should be displayed as:
                       // * usually plants have 7 stages of life from -1 to 5, where:
-                      // -1 means dead
+                      // -1 means empty
                       // 0 means sappling
                       // 5 (or last stage) means fully grown
 
@@ -42,13 +42,24 @@ public class Plant
 
     public void Grow()
     {
-        if (plantHealth <= 0) 
+        if (stage >= 0)
         {
-            return;
+            if (isHappy == false)
+            {
+                plantHealth -= 1;
+                GardenManager.instance.PlantHealthDown(index);
+            }
+            if (plantHealth <= 0)
+            {
+                KillPlant();
+            }
+            else
+            {
+                plantAge += 1;
+                GrowEffectList();
+            }
+            UpdateVisuals();
         }
-
-        plantAge += 1;
-        GrowEffectList();
     }
     // Increases plant's age. (uses GrowEffectList())
 
@@ -58,22 +69,28 @@ public class Plant
     // Defines effects for increasing plant's age.
     // Every Plant defines it's own effects upon reaching different ages.
 
-    public void IncrementStage()
-    {
-        stage += 1;
-        UpdateVisualStage();
-    }
-
     public void KillPlant()
     {
         stage = -1;
+        isHappy = true;
         plantName = PlantName.DEAD;
-        UpdateVisualStage();
     }
 
-    public void UpdateVisualStage()
+    public bool AttemptToWater()
     {
-        GardenManager.instance.PlantVisualChange(index, stage);
+        if (!isHappy)
+        {
+            isHappy = true;
+            UpdateVisuals();
+            return true;
+        }
+
+        return false;
+    }
+
+    public void UpdateVisuals()
+    {
+        GardenManager.instance.PlantVisualChange(index, stage, isHappy);
     }
 
     public override string ToString()

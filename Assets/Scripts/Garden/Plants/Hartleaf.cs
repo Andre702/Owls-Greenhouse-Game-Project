@@ -16,20 +16,25 @@ public class Hartleaf : Plant
     {
         switch (plantAge)
         {
+            case 1:
+                isHappy = false;
+                break;
             case 3:
-                IncrementStage();
+                stage += 1;
                 break;
             case 6:
-                IncrementStage();
+                stage += 1;
                 break;
             case 10:
-                IncrementStage();
+                stage += 1;
+                isHappy = false;
                 break;
             case 12:
-                IncrementStage();
+                stage += 1;
+                isHappy = false;
                 break;
             case 14:
-                IncrementStage();
+                stage += 1;
                 break;
             default:
                 //nothing special happens

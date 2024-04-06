@@ -6,21 +6,33 @@ using UnityEngine.UI;
 public class PlantImage : MonoBehaviour
 {
     private Sprite[] spriteSheet;
+    private bool waterIconOn = false;
 
-    public void EnablePlant(Sprite[] _spriteSheet, int stage = 0) 
+    public void EnablePlant(Sprite[] _spriteSheet, bool isHappy, int stage = 0) 
     {
         if (_spriteSheet != null)
         {
             spriteSheet = _spriteSheet;
-            UpdateSprite(stage);
-            gameObject.SetActive(true);
+            UpdateCurrentSprite(stage, isHappy);
+            gameObject.SetActive(isHappy);
+        }
+        else
+        {
+            GetComponent<Image>().sprite = null;
         }
     }
-    // Shows plant which was hidden if a sprite sheet was set for it. (Uses UpdateSprite)
+    // Shows plant which was hidden if a sprite sheet was set for it. (Uses UpdateCurrentSprite)
     // Set custom stage when returning to the Greenhouse after couple hours in the Forest.
 
-    public void UpdateSprite(int stage)
+    public void UpdateCurrentSprite(int stage, bool isHappy)
     {
+        if (isHappy != waterIconOn)
+        {
+            waterIconOn = isHappy;
+
+            transform.GetChild(0).gameObject.SetActive(!isHappy);
+        }
+
         if (spriteSheet != null)
         {
             if (stage < spriteSheet.Length)
@@ -41,9 +53,10 @@ public class PlantImage : MonoBehaviour
     // Used to quickly update Plant sprite from current sprite.
     // This could use an exception system, with it it could display index of plant throwing exceptions
 
-    public void SetSprite(Sprite sprite)
+    public void ChangeImageToDead(Sprite sprite)
     {
         GetComponent<Image>().sprite = sprite;
+        transform.GetChild(0).gameObject.SetActive(false);
     }
     // Sets custom sprite for a plant
     // Could be redundant if every sprite sheet will include 2 more stages: dead and empty

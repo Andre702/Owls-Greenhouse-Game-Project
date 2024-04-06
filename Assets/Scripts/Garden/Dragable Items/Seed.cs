@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class Seed : DragableItem
 {
-    public Sprite seedSprite;
     public PlantName plantName;
 
     private bool unlocked;
@@ -14,7 +13,6 @@ public class Seed : DragableItem
     protected override void Awake()
     {
         base.Awake();
-        seedSprite = GetComponent<Image>().sprite;
         thisItemType = ItemType.Seed;
 
         canBeUsed = true; // Seeds need to check if they are unlocked at this game level
@@ -43,5 +41,10 @@ public class Seed : DragableItem
     {
         canvasGroup.alpha = 1;
         base.EndDragEffect();
+    }
+
+    public Sprite GetSprite()
+    {
+        return GetComponent<Image>().sprite;
     }
 }

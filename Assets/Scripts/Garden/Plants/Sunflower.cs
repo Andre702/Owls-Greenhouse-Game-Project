@@ -17,19 +17,21 @@ public class Sunflower : Plant
         switch (plantAge)
         {
             case 2:
-                IncrementStage();
+                stage += 1;
                 break;
             case 4:
-                IncrementStage();
+                stage += 1;
+                isHappy = false;
                 break;
             case 6:
-                IncrementStage();
+                stage += 1;
                 break;
             case 8:
-                IncrementStage();
+                stage += 1;
+                isHappy = false;
                 break;
             case 10:
-                IncrementStage();
+                stage += 1;
                 break;
             default:
                 //nothing special happens

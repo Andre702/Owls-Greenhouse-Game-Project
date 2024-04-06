@@ -29,7 +29,7 @@ public class Water : DragableItem
         pickupSound = "Flop"; // Replace those with actual sounds xd
         useSound = "Flush";
 
-        updateWaterLevel();
+        UpdateWaterLevel();
 
     }
 
@@ -60,15 +60,27 @@ public class Water : DragableItem
         if (wasUsed)
         {
             waterLevel -= 20;
-            updateWaterLevel();
+            UpdateWaterLevel();
         }
     }
 
-    private void updateWaterLevel()
+    private void UpdateWaterLevel()
     {
         float waterPercentage = waterLevel / 100f;
         Debug.Log(waterLevel / 100);
         GameObject.Find("WaterLevel").transform.localScale = new Vector3(1, waterPercentage, 1);
+    }
+
+    public void AddWater(int amount)
+    {
+        if (waterLevel + amount <= 100)
+        {
+            waterLevel += amount;
+        }
+        else 
+        {
+            waterLevel = 100;
+        }
     }
 
 }
