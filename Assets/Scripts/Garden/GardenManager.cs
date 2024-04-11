@@ -124,7 +124,7 @@ public class GardenManager : MonoBehaviour
 
     public bool PlantAttemptToWater(int index)
     {
-        return GameData.instance.GetPlantData(index).AttemptToWater();
+        return GameData.instance.GetPlantData(index).AttemptToWater ();
     }
 
     public bool PlantAtemptRelocate()
