@@ -7,40 +7,25 @@ public class EnemyPatrol : MonoBehaviour
 
     public Transform pointA;
     public Transform pointB;
-    private Rigidbody2D rb;
     private Transform target;
     public float speed;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
-        Debug.Log("Start target postion" + target.position);
-        Debug.Log("Start transform postion" + transform.position);
-        Debug.Log("Start B postion" + pointB.position);
-        target.position = pointB.position;
+        target = pointB;
     }
 
     // Update is called once per frame
     void Update()
     {
         float step = speed * Time.deltaTime;
+        transform.position = Vector3.MoveTowards(transform.position, target.position, step);
 
-        Debug.Log("target postion" + target.position);
-        Debug.Log("transform postion" + transform.position);
-        Debug.Log("B postion" + pointB.position);
-        transform.position = Vector2.MoveTowards(transform.position, target.position, step);
+        Debug.Log("Distance " + Vector3.Distance(transform.position, target.position));
 
-        if (Vector2.Distance(transform.position, target.position) < 0.01f)
+        if (Vector3.Distance(transform.position, target.position) < 0.9f)
         {
-            if (target.position == pointB.position)
-            {
-                target.position = pointA.position;
-            }
-            else if (target.position == pointA.position)
-            {
-                target.position = pointB.position;
-          }
+            target = target == pointA ? pointB : pointA;
         }
     }
 }
