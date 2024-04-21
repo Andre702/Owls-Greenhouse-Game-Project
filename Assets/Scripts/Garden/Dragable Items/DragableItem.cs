@@ -37,7 +37,7 @@ public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         if (canBeUsed)
         {
             // og parent used to be assigned here (hopefully won't cause bugs)
-            transform.SetParent(GameObject.Find("UICanvas").transform); // chage parent temporarily
+            transform.SetParent(GameObject.Find("GameCanvas").transform); // chage parent temporarily
 
             canvasGroup.blocksRaycasts = false;
         }

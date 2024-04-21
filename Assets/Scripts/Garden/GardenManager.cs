@@ -2,20 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DataBase;
-using System;
 using UnityEngine.SceneManagement;
-using UnityEngine.Events;
 
 public class GardenManager : MonoBehaviour
 {
+    // This class is used for managing all functions and visuals of the Garden scene
+
     public static GardenManager instance { get; private set; }
 
     public Transform[] pots;
-    public (bool isFull, bool isQuestion, Plant plant, int target) cursor;
-    // right now it is: isFull, isQuestion, Plant carying, index of the target hovered over , 
-    public Transform cursorImage;
-    public Transform waterContainer;
-    
+    // list of pots references: used for planting system, relocating and 
+
+    public Transform gameCanvas;
+    // canvas reference: used for moving dragable objects closer to the camera so they won't be obscured
+
+    //public GardenCursor cursor;
+    public (bool isFull, int type, Plant plant, int targetPotIndex) cursor;
+    public CursorImage cursorImage;
+    // cursor: a small container that player can move and use for storing single plant data and relocating it
+    // It will also be used when player can get information on different objects in the Garden (possibly Forest to)
+
+
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -32,16 +39,43 @@ public class GardenManager : MonoBehaviour
         PlantAllVisualUpdate();
     }
 
+    private void Update()
+    {
+        if (cursor.isFull)
+        {
+            cursorImage.FollowMouse();
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                cursorImage.Disable();
+            }
+            else if (Input.GetMouseButtonDown(0))
+            {
+                if (PlantAtemptRelocate())
+                {
+                    cursorImage.Disable();
+                    CursorClear();
+                }
+            }
+        }
+        
+    }
+
     public void PlantDigUp(int index)
     {
-        cursor = (true, false, GameData.instance.GetPlantData(index), -1);
-        if (cursor.plant.plantName != PlantName.DEAD)
+        if (GameData.instance.GetPlantData(index).plantName == PlantName.EMPTY)
         {
-            cursorImage.GetComponent<GreenhouseCursor>().EnableCursor(0);
+            return;
+        }
+
+        cursor = (true, cursor.type, GameData.instance.GetPlantData(index), -1);
+        if (cursor.plant.plantName == PlantName.DEAD)
+        {
+            CursorClear();
         }
         else
         {
-            CursorClear();
+            cursorImage.Enable(cursor.type); ;
         }
         GameData.instance.DeletePlantData(index);
         pots[index].GetComponent<Pot>().RemovePlant();
@@ -51,11 +85,11 @@ public class GardenManager : MonoBehaviour
     // Updates Plant data on GameData (Uses DeletePlantData).
     // Disables PlantImage (Uses EnablePlant of PlantImage on specified index position).
 
-    public void PlantHealthDown(int index)
+    public void PlantHealthDownVisualEffect(int index)
     {
         //Do something when plants gets damage
     }
-    // Not implemented yet. Usage of this will be very small only to keep the access structure.
+    // Not implemented yet. Usage of this may be very small.
 
     public void PlantPlant(int index, PlantName name)
     {
@@ -121,6 +155,8 @@ public class GardenManager : MonoBehaviour
             pots[i].GetComponent<Pot>().PlantPlant(plantGraphics.icon);
         }
     }
+    // Mass PlantVisualChange used on scene change to Garden
+    // Uses data from GameData and invokes PlantVisualChange(plant) on every plant index
 
     public bool PlantAttemptToWater(int index)
     {
@@ -129,46 +165,32 @@ public class GardenManager : MonoBehaviour
 
     public bool PlantAtemptRelocate()
     {
-        if (cursor.target < 0)
+        if (cursor.targetPotIndex < 0)
         {
             Debug.Log("Cursor not over pot");
             return false;
         }
-        cursor.plant.index = cursor.target;
+        cursor.plant.index = cursor.targetPotIndex;
 
         Debug.Log(cursor.plant.ToString());
-        GameData.instance.SetPlantData(cursor.target, cursor.plant);
+        GameData.instance.SetPlantData(cursor.targetPotIndex, cursor.plant);
         (Sprite[] spriteSheet, Sprite icon) plantGraphics = GameData.instance.GetPlantGraphicsByName(cursor.plant.plantName);
-        pots[cursor.target].GetChild(1).GetComponent<PlantImage>().EnablePlant(plantGraphics.spriteSheet, cursor.plant.isHappy, cursor.plant.stage);
-        pots[cursor.target].GetComponent<Pot>().PlantPlant(plantGraphics.icon);
+        pots[cursor.targetPotIndex].GetChild(1).GetComponent<PlantImage>().EnablePlant(plantGraphics.spriteSheet, cursor.plant.isHappy, cursor.plant.stage);
+        pots[cursor.targetPotIndex].GetComponent<Pot>().PlantPlant(plantGraphics.icon);
 
         return true;
 
     }
-
+    // Envoked by Pot class when clicked on with apropriate state of cursor (full and carrying a plant)
+    // Uses SetPlantData with plant data stored in the cursor and then plants it in the hovered over pot.
     public void CursorClear()
     {
-        cursor = (false, false, null, -1);
+        cursor = (false, 0, null, -1);
     }
-
-    public void NextHour()
-    {
-        GameData.instance.IncrementHour();
-        PlantAllGrow();
-        GameData.instance.PrintAllPlantsData();
-    }
-
-    public void PlantAllGrow(int growth = 1)
-    {
-        for (int i = 0; i < GameData.instance.GetAllPlants().Length; i++)
-        {
-            GameData.instance.GetPlantData(i).Grow();
-        }
-    }
-
+    // Resets cursor data
     public void GoForest()
     {
-        GameData.instance.StartTime();
+        GameManager.instance.StartTime();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 

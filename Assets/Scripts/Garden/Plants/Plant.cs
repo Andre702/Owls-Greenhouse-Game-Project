@@ -47,7 +47,7 @@ public class Plant
             if (isHappy == false)
             {
                 plantHealth -= 1;
-                GardenManager.instance.PlantHealthDown(index);
+                GardenManager.instance.PlantHealthDownVisualEffect(index);
             }
             if (plantHealth <= 0)
             {
@@ -90,7 +90,10 @@ public class Plant
 
     public void UpdateVisuals()
     {
-        GardenManager.instance.PlantVisualChange(this);
+        if (GardenManager.instance != null)
+        {
+            GardenManager.instance.PlantVisualChange(this);
+        }
     }
 
     public override string ToString()

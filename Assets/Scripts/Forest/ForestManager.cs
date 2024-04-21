@@ -23,6 +23,7 @@ public class ForestManager : MonoBehaviour
 
     public void GoGreenhouse()
     {
+        GameManager.instance.StopTime();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 }

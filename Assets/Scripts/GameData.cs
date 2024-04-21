@@ -7,7 +7,10 @@ namespace DataBase
     [System.Serializable]
     public class GameData : MonoBehaviour
     {
+        // This class is used for storage and quick recovery of all primary and persisting game data
+        
         public static GameData instance { get; private set; }
+        // in order to access this instance a class must be using DataBase namespace ^
 
         private void Awake()
         {
@@ -27,22 +30,12 @@ namespace DataBase
 
             plantImageMap.Add(PlantName.UNKNOWN, (null, null));
             plantImageMap.Add(PlantName.EMPTY, (null, null));
-            plantImageMap.Add(PlantName.DEAD, (deadPlant, null));
+            plantImageMap.Add(PlantName.DEAD, (deadPlant, plantIcons[3]));
             plantImageMap.Add(PlantName.Sunflower, (sunflowerSheet, plantIcons[0]));
             plantImageMap.Add(PlantName.Sprillia, (sprilliaSheet, plantIcons[1]));
             plantImageMap.Add(PlantName.Hartleaf, (hartleafSheet, plantIcons[2]));
 
             hour = 1;
-        }
-
-        private void Update()
-        {
-            if (timeIsFlowing)
-            {
-                currentTime += Time.deltaTime;
-                hour += (int)((currentTime * secondsInHour) % secondsInHour);
-            }
-            // connect this time to either GardenManager or more likely to a new class like PlantGrowthCOntroller
         }
 
         #region Plant related ============================================================================================
@@ -124,36 +117,19 @@ namespace DataBase
         #endregion 
 
 
-        #region Time related ============================================================================================
+        #region Time related ============================================================================================    
 
-        public float secondsInHour = 10;
-
-        private int hour;
-        private bool timeIsFlowing = false;
-        private float currentTime = 0f;
-        
+        public int hour;
 
         public int GetHour()
         {
             return hour;
         }
-        
-        public void StartTime()
-        {
-            timeIsFlowing = true;
-        }
-
-        public void StopTime()
-        {
-            timeIsFlowing = false;
-            currentTime = 0;
-        }
-
+       
         public void IncrementHour()
         {
             hour += 1;
         }
-
 
         #endregion
         // time, hour, water level needs to be added here probably
