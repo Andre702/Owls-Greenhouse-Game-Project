@@ -27,6 +27,10 @@ public class PlantImage : MonoBehaviour
     {
 
         transform.GetChild(0).gameObject.SetActive(!isHappy);
+        if (stage < 0)
+        {
+            return;
+        }
 
         if (spriteSheet != null)
         {

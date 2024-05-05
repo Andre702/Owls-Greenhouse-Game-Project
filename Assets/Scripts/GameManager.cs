@@ -55,8 +55,9 @@ public class GameManager : MonoBehaviour
         switch (need)
         {
             case PlantNeed.Alone:
-                if (GameData.instance.GetPlantData(plantIndex) != null ||
-                    GameData.instance.GetPlantData(plantIndex).plantName == PlantName.EMPTY)
+                if (GameData.instance.GetPlantData(plantIndex - 1).plantName == PlantName.EMPTY &&
+                    GameData.instance.GetPlantData(plantIndex + 1).plantName == PlantName.EMPTY
+                    )
                 {
                     return true;
                 }
@@ -90,7 +91,7 @@ public class GameManager : MonoBehaviour
     {
         GameData.instance.IncrementHour();
         PlantAllGrow();
-        GameData.instance.PrintAllPlantsData();
+        PlantAllCheckHappiness();
         Hud.instance.UpdateHourDisplay();
     }
 
@@ -107,9 +108,23 @@ public class GameManager : MonoBehaviour
 
     public void PlantAllGrow(int growth = 1)
     {
-        for (int i = 0; i < GameData.instance.GetAllPlants().Length; i++)
+        foreach (var plantData in GameData.instance.GetAllPlants())
         {
-            GameData.instance.GetPlantData(i).Grow();
+            if (plantData.plantName != PlantName.EMPTY)
+            {
+                plantData.Grow();
+            }
+        }
+    }
+
+    public void PlantAllCheckHappiness(int growth = 1)
+    {
+        foreach (var plantData in GameData.instance.GetAllPlants())
+        {
+            if (plantData.plantName != PlantName.EMPTY)
+            {
+                plantData.CheckHappiness();
+            }
         }
     }
 }

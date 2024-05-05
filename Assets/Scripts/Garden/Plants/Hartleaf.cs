@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class Hartleaf : Plant
 {
-    //Needs:
-    public bool needsWater = false;
+    //Custom Needs:
     public bool needsToBeAlone = false;
     public bool needsToBeNearOther = false;
     public Hartleaf(int _index) : base(_index)
@@ -35,6 +34,9 @@ public class Hartleaf : Plant
             case 4:
                 needsToBeAlone = true;
                 break;
+            case 5:
+                needsToBeAlone = false;
+                break;
             case 6:
                 stage += 1;
                 break;
@@ -61,7 +63,7 @@ public class Hartleaf : Plant
 
     }
 
-    public override bool CheckHappiness()
+    public override bool CheckNeeds()
     {
         if (needsWater)
         {
@@ -77,6 +79,5 @@ public class Hartleaf : Plant
         }
 
         return true;
-        
     }
 }

@@ -58,7 +58,7 @@ namespace DataBase
             else
             {
                 //Debug.LogError("Invalid plant index.");
-                return null;
+                return new Plant();
             }
         }
 

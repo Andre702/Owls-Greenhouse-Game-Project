@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using DataBase;
 
-public class Pot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
+public class Pot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     public Sprite ogSprite;
     public Sprite hlSprite;
     public Transform potPlantIcon;
     public int potIndex;
 
-    private bool isEmpty = true;
+    public bool isEmpty = true;
 
     private void Awake()
     {
@@ -98,5 +99,10 @@ public class Pot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerEx
     {
         GetComponent<Image>().sprite = ogSprite;
         GardenManager.instance.cursor.targetPotIndex = -1;
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        Debug.Log(GameData.instance.GetPlantData(this.potIndex).ToString());
     }
 }

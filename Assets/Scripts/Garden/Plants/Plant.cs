@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public enum PlantName
 {
@@ -30,7 +31,10 @@ public class Plant
                       // -1 means empty
                       // 0 means sappling or default
                       // 5 (or last stage) means fully grown
-    
+
+    //Standard needs:
+    public bool needsWater = false;
+
 
     public Plant(PlantName name, int age, int _health, int _index, int _stage = -1, bool _ishappy = true)
     {
@@ -47,14 +51,19 @@ public class Plant
         index = _index;
     }
 
+    public Plant()
+    {
+        plantName = PlantName.EMPTY;
+    }
+
     public void Grow()
     {
         if (stage >= 0)
         {
-
             if (isHappy == false)
             {
                 plantHealth -= 1;
+                //Debug.Log($"{plantName}, planted on pot nr. {index} lost health");
                 GardenManager.instance.PlantHealthDownVisualEffect(index);
             }
             if (plantHealth <= 0)
@@ -66,7 +75,6 @@ public class Plant
                 plantAge += 1;
                 GrowEffectList();
             }
-            UpdateVisuals();
         }
     }
     // Increases plant's age. (uses GrowEffectList())
@@ -77,7 +85,13 @@ public class Plant
     // Defines effects for increasing plant's age.
     // Every Plant defines it's own effects upon reaching different ages.
 
-    public virtual bool CheckHappiness()
+    public void CheckHappiness()
+    {
+        isHappy = CheckNeeds();
+        UpdateHappinessIcon();
+    }
+
+    public virtual bool CheckNeeds()
     {
         return true;
     }
@@ -91,10 +105,10 @@ public class Plant
 
     public bool AttemptToWater()
     {
-        if (!isHappy)
+        if (needsWater)
         {
-            isHappy = true;
-            UpdateVisuals();
+            needsWater = false;
+            CheckHappiness();
             return true;
         }
 
@@ -109,8 +123,18 @@ public class Plant
         }
     }
 
+    public void UpdateHappinessIcon()
+    {
+        if (GardenManager.instance != null)
+        {
+            GardenManager.instance.PlantIconChange(this.index, this.isHappy);
+        }
+    }
+
     public override string ToString()
     {
         return $"(Name: {plantName}, Age: {plantAge}, Stage: {stage}, HP: {plantHealth}, Happy: {isHappy})";
     }
+
+    
 }

@@ -79,6 +79,7 @@ public class GardenManager : MonoBehaviour
                 return pot;
             }
         }
+        Debug.LogWarning("NO POT OF THAT INDEX");
         return null;
     }
     // As A special pinvisible plant of index 4 was added this function helps to safetely get the right pot with the right index.
@@ -96,6 +97,8 @@ public class GardenManager : MonoBehaviour
         targetPot.GetComponent<Pot>().RemovePlant();
         targetPot.GetChild(1).GetComponent<PlantImage>().DisablePlant();
 
+        GameManager.instance.PlantAllCheckHappiness();
+
     }
     // Updates Plant data on GameData (Uses DeletePlantData).
     // Disables PlantImage (Uses EnablePlant of PlantImage on specified index position).
@@ -111,7 +114,6 @@ public class GardenManager : MonoBehaviour
         Plant newPlant;
         Sprite[] newPlantSpriteSheet = GameData.instance.GetPlantGraphicsByName(name).spriteSheet;
         // (Plant Sprite Sheet, Plant Icon)
-        Debug.Log(name);
 
         switch (name)
         {
@@ -136,6 +138,8 @@ public class GardenManager : MonoBehaviour
 
 
         GetPotOfIndex(index).GetChild(1).GetComponent<PlantImage>().EnablePlant(newPlantSpriteSheet, true);
+
+        GameManager.instance.PlantAllCheckHappiness();
     }
     // Updates Plant data on GameData by switch based on plantName (Uses SetPlantData).
     // Sets sprite sheet for a PlantImage (Uses EnablePlant of PlantImage on specified index position).
@@ -160,17 +164,27 @@ public class GardenManager : MonoBehaviour
     // ChangeImageToDead - if the plant is dead or,
     // UpdateCurrentSprite - if the plant is alive)
 
+    public void PlantIconChange(int index, bool isHappy)
+    {
+        PlantImage plantImageTarget = GetPotOfIndex(index).GetChild(1).GetComponent<PlantImage>();
+        plantImageTarget.UpdateCurrentSprite(-1, isHappy);
+    }
+    // Changes only an icon. Works faster than PlantVisualChange when it is not necessary
     public void PlantAllVisualUpdate()
     {
-        for (int i = 0; i < GameData.instance.GetAllPlants().Length-1; i++)
+        foreach (var plant in GameData.instance.GetAllPlants())
         {
-            // In game there is a hidden Plant of index 4 for making needs checks easier, thus Length of plant idexes needs to be -1.
+            if (plant.plantName != PlantName.EMPTY)
+            {
+                (Sprite[] spriteSheet, Sprite icon) plantGraphics = GameData.instance.GetPlantGraphicsByName(plant.plantName);
 
-            Plant plant = GameData.instance.GetPlantData(i);
-            (Sprite[] spriteSheet, Sprite icon) plantGraphics = GameData.instance.GetPlantGraphicsByName(plant.plantName);
-
-            pots[i].GetChild(1).GetComponent<PlantImage>().EnablePlant(plantGraphics.spriteSheet, plant.isHappy, plant.stage);
-            pots[i].GetComponent<Pot>().PlantPlant(plantGraphics.icon);
+                GetPotOfIndex(plant.index).GetChild(1).GetComponent<PlantImage>().EnablePlant(plantGraphics.spriteSheet, plant.isHappy, plant.stage);
+                if (plant.plantName != PlantName.EMPTY)
+                {
+                    continue;
+                }
+                GetPotOfIndex(plant.index).GetComponent<Pot>().PlantPlant(plantGraphics.icon);
+            }
         }
     }
     // Mass PlantVisualChange used on scene change to Garden
@@ -188,15 +202,25 @@ public class GardenManager : MonoBehaviour
             Debug.Log("Cursor not over pot");
             return false;
         }
-        cursor.plant.index = cursor.targetPotIndex;
 
-        GameData.instance.SetPlantData(cursor.targetPotIndex, cursor.plant);
-        (Sprite[] spriteSheet, Sprite icon) plantGraphics = GameData.instance.GetPlantGraphicsByName(cursor.plant.plantName);
-        pots[cursor.targetPotIndex].GetChild(1).GetComponent<PlantImage>().EnablePlant(plantGraphics.spriteSheet, cursor.plant.isHappy, cursor.plant.stage);
-        pots[cursor.targetPotIndex].GetComponent<Pot>().PlantPlant(plantGraphics.icon);
+        Transform clickedPot = GetPotOfIndex(cursor.targetPotIndex);
 
-        return true;
+        if (clickedPot.GetComponent<Pot>().isEmpty)
+        {
+            cursor.plant.index = cursor.targetPotIndex;
+            // Change plant Index to the index of the pot
 
+            GameData.instance.SetPlantData(cursor.targetPotIndex, cursor.plant);
+            (Sprite[] spriteSheet, Sprite icon) plantGraphics = GameData.instance.GetPlantGraphicsByName(cursor.plant.plantName);
+            clickedPot.GetChild(1).GetComponent<PlantImage>().EnablePlant(plantGraphics.spriteSheet, cursor.plant.isHappy, cursor.plant.stage);
+            clickedPot.GetComponent<Pot>().PlantPlant(plantGraphics.icon);
+
+            GameManager.instance.PlantAllCheckHappiness();
+            return true;
+        } 
+
+        // clicked Pot is not empty
+        return false;
     }
     // Envoked by Pot class when clicked on with apropriate state of cursor (full and carrying a plant)
     // Uses SetPlantData with plant data stored in the cursor and then plants it in the hovered over pot.
