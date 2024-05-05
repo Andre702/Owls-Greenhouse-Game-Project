@@ -12,6 +12,12 @@ public enum PlantName
     Hartleaf
 }
 
+public enum PlantNeed
+{
+    Alone,
+    NearOther,
+}
+
 public class Plant
 {
     public PlantName plantName; // describes type of the Plant
@@ -24,6 +30,7 @@ public class Plant
                       // -1 means empty
                       // 0 means sappling or default
                       // 5 (or last stage) means fully grown
+    
 
     public Plant(PlantName name, int age, int _health, int _index, int _stage = -1, bool _ishappy = true)
     {
@@ -44,6 +51,7 @@ public class Plant
     {
         if (stage >= 0)
         {
+
             if (isHappy == false)
             {
                 plantHealth -= 1;
@@ -68,6 +76,11 @@ public class Plant
     }
     // Defines effects for increasing plant's age.
     // Every Plant defines it's own effects upon reaching different ages.
+
+    public virtual bool CheckHappiness()
+    {
+        return true;
+    }
 
     public void KillPlant()
     {

@@ -8,9 +8,12 @@ public class CursorImage : MonoBehaviour
 {
     public Sprite[] cursorTypes;
 
+    public Transform image;
+
     public void Enable(int cursorType)
     {
-        GetComponent<Image>().sprite = cursorTypes[cursorType];
+        image.GetComponent<Image>().sprite = cursorTypes[cursorType];
+        gameObject.SetActive(true);
     }
 
     public void FollowMouse()
@@ -18,10 +21,5 @@ public class CursorImage : MonoBehaviour
         Vector3 cursorPosition = Input.mousePosition;
         cursorPosition.z = 9f;
         this.transform.position = Camera.main.ScreenToWorldPoint(cursorPosition);
-    }
-
-    public void Disable()
-    {
-        gameObject.SetActive(false);
     }
 }

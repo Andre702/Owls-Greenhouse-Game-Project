@@ -24,6 +24,7 @@ public class ForestManager : MonoBehaviour
     public void GoGreenhouse()
     {
         GameManager.instance.StopTime();
+        Hud.instance.ButtonsInteractable(true);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 }

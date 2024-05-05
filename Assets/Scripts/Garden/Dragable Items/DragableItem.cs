@@ -11,7 +11,7 @@ public enum ItemType
     Shovel
 }
 
-public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
+public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     public Vector3 screenPosition;
     public ItemType thisItemType { get; protected set; }
@@ -24,6 +24,8 @@ public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     protected CanvasGroup canvasGroup;
     protected string pickupSound;
     protected string useSound;
+
+    protected string itemExplanation;
 
     protected virtual void Awake()
     {
@@ -115,6 +117,14 @@ public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         else
         {
             // we can make owl say something here
+        }
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (GardenManager.instance.cursor.type == 2)
+        {
+            GardenManager.instance.ExplainObject(itemExplanation);
         }
     }
 }

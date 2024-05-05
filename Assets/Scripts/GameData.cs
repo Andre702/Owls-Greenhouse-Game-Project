@@ -47,7 +47,7 @@ namespace DataBase
         public Sprite[] plantIcons;
 
         private Dictionary<PlantName, (Sprite[], Sprite)> plantImageMap = new Dictionary<PlantName, (Sprite[], Sprite)>();
-        private Plant[] plantStates = new Plant[7];
+        private Plant[] plantStates = new Plant[8];
 
         public Plant GetPlantData(int index)
         {
@@ -57,7 +57,7 @@ namespace DataBase
             }
             else
             {
-                Debug.LogError("Invalid plant index.");
+                //Debug.LogError("Invalid plant index.");
                 return null;
             }
         }

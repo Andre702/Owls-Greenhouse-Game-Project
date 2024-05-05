@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using System.Reflection;
 
 public class Pot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
 {
