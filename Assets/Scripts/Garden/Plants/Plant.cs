@@ -70,7 +70,7 @@ public class Plant
             {
                 KillPlant();
             }
-            else
+            else if (stage < 5)
             {
                 plantAge += 1;
                 GrowEffectList();

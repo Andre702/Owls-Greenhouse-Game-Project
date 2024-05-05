@@ -113,6 +113,7 @@ public class GameManager : MonoBehaviour
             if (plantData.plantName != PlantName.EMPTY)
             {
                 plantData.Grow();
+                plantData.UpdateVisuals();
             }
         }
     }

@@ -179,7 +179,7 @@ public class GardenManager : MonoBehaviour
                 (Sprite[] spriteSheet, Sprite icon) plantGraphics = GameData.instance.GetPlantGraphicsByName(plant.plantName);
 
                 GetPotOfIndex(plant.index).GetChild(1).GetComponent<PlantImage>().EnablePlant(plantGraphics.spriteSheet, plant.isHappy, plant.stage);
-                if (plant.plantName != PlantName.EMPTY)
+                if (plant.plantName == PlantName.EMPTY)
                 {
                     continue;
                 }
