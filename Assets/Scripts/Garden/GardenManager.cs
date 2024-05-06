@@ -22,6 +22,7 @@ public class GardenManager : MonoBehaviour
     // cursor: a small container that player can move and use for storing single plant data and relocating it
     // It will also be used when player can get information on different objects in the Garden (possibly Forest to)
 
+    [SerializeField] private Water water;
 
     private void Awake()
     {
@@ -32,6 +33,22 @@ public class GardenManager : MonoBehaviour
         }
 
         instance = this;
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        water.AddWater(GameData.instance.getPlayerWater());
+        GameData.instance.resetPlayerWater();
     }
 
     private void Start()

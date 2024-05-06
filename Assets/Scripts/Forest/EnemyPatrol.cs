@@ -21,7 +21,7 @@ public class EnemyPatrol : MonoBehaviour
         float step = speed * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, target.position, step);
 
-        Debug.Log("Distance " + Vector3.Distance(transform.position, target.position));
+        //Debug.Log("Distance " + Vector3.Distance(transform.position, target.position));
 
         if (Vector3.Distance(transform.position, target.position) < 0.9f)
         {

@@ -134,7 +134,26 @@ namespace DataBase
         #endregion
         // time, hour, water level needs to be added here probably
 
+        #region Water ===========================================================================================
+        float playerWater = 0;
+        public float changePlayerWater(float water) 
+        {
+            playerWater += water;
+            if (playerWater > 100) playerWater = 100;
+            if (playerWater < 0) playerWater = 0;
+            return playerWater;
+        }
 
+        public float getPlayerWater()
+        {
+            return playerWater;
+        }
+
+        public void resetPlayerWater()
+        {
+            playerWater = 0;
+        }
+        #endregion
     }
 }
 

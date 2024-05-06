@@ -71,7 +71,7 @@ public class Water : DragableItem
         GameObject.Find("WaterLevel").transform.localScale = new Vector3(1, waterPercentage, 1);
     }
 
-    public void AddWater(int amount)
+    public void AddWater(float amount)
     {
         if (waterLevel + amount <= 100)
         {
@@ -81,6 +81,7 @@ public class Water : DragableItem
         {
             waterLevel = 100;
         }
+        UpdateWaterLevel();
     }
 
 }
