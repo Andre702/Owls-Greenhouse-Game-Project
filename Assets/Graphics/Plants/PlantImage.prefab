@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3527481818293433970}
   - component: {fileID: 7246228200321840380}
   m_Layer: 5
-  m_Name: waterIndicator
+  m_Name: unhappyIndicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35,7 +35,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 22, y: -3}
+  m_AnchoredPosition: {x: 22, y: -36}
   m_SizeDelta: {x: 7, y: 7}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &3527481818293433970
@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 50788300e3de1644ba9c5b7d42174ba4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4e2685d3b0f963443ac6b49cf8f0f79d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

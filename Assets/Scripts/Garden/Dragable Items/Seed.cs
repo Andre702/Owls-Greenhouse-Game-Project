@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class Seed : DragableItem
 {
+
     public PlantName plantName;
 
     private bool unlocked;
@@ -15,6 +16,9 @@ public class Seed : DragableItem
         base.Awake();
         thisItemType = ItemType.Seed;
 
+        itemExplanation = $"This is a {plantName.ToString()} seed. Drag and drop it into one of the pots to plant it.\n" +
+            $"Take good care of each and every plant you grow. Remember to speak with them often to learn their needs.";
+        
         canBeUsed = true; // Seeds need to check if they are unlocked at this game level
                           // and then determine weather or not they can be used yet
 
