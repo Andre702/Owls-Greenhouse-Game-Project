@@ -48,7 +48,7 @@ public class GardenManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        water.AddWater(GameData.instance.getPlayerWater());
+        water.AddWater(GameData.instance.getPlayerWater(), GameData.instance.getWaterSaved());
         GameData.instance.resetPlayerWater();
     }
 
@@ -304,6 +304,7 @@ public class GardenManager : MonoBehaviour
 
     public void GoForest()
     {
+        GameData.instance.saveWaterLevel(water.getWaterLevel());
         GameManager.instance.StartTime();
         Hud.instance.ButtonsInteractable(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);

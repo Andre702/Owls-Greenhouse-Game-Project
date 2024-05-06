@@ -136,6 +136,7 @@ namespace DataBase
 
         #region Water ===========================================================================================
         float playerWater = 0;
+        float waterChanges = 100;
         public float changePlayerWater(float water) 
         {
             playerWater += water;
@@ -152,6 +153,16 @@ namespace DataBase
         public void resetPlayerWater()
         {
             playerWater = 0;
+        }
+
+        public void saveWaterLevel(float water)
+        {
+            waterChanges = water;
+        }
+
+        public float getWaterSaved()
+        {
+            return waterChanges;
         }
         #endregion
     }

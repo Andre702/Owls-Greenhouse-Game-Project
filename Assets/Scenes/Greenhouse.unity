@@ -218,6 +218,7 @@ MonoBehaviour:
   hlSprite: {fileID: 208855375, guid: 4e6f9d6a01ab91d4da61d9bd780561b6, type: 3}
   potPlantIcon: {fileID: 217002304}
   potIndex: 3
+  isEmpty: 1
 --- !u!1 &36640911
 GameObject:
   m_ObjectHideFlags: 0
@@ -313,6 +314,7 @@ MonoBehaviour:
   hlSprite: {fileID: 208855375, guid: 4e6f9d6a01ab91d4da61d9bd780561b6, type: 3}
   potPlantIcon: {fileID: 306726064}
   potIndex: 1
+  isEmpty: 1
 --- !u!1 &69209526
 GameObject:
   m_ObjectHideFlags: 0
@@ -474,6 +476,7 @@ MonoBehaviour:
   - {fileID: 1954763230}
   gameCanvas: {fileID: 2126863817}
   cursorImage: {fileID: 1101656747}
+  water: {fileID: 848241032}
   dialogueManager: {fileID: 438176659}
 --- !u!1 &182836005
 GameObject:
@@ -2924,6 +2927,7 @@ MonoBehaviour:
   hlSprite: {fileID: 208855375, guid: 4e6f9d6a01ab91d4da61d9bd780561b6, type: 3}
   potPlantIcon: {fileID: 224808304}
   potIndex: 6
+  isEmpty: 1
 --- !u!114 &894011078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3823,6 +3827,7 @@ MonoBehaviour:
   hlSprite: {fileID: 208855375, guid: 4e6f9d6a01ab91d4da61d9bd780561b6, type: 3}
   potPlantIcon: {fileID: 767757701}
   potIndex: 5
+  isEmpty: 1
 --- !u!114 &1134607451
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4242,6 +4247,7 @@ MonoBehaviour:
   hlSprite: {fileID: 208855375, guid: 4e6f9d6a01ab91d4da61d9bd780561b6, type: 3}
   potPlantIcon: {fileID: 267458325}
   potIndex: 2
+  isEmpty: 1
 --- !u!1 &1397274624
 GameObject:
   m_ObjectHideFlags: 0
@@ -5540,6 +5546,7 @@ MonoBehaviour:
   hlSprite: {fileID: 208855375, guid: 4e6f9d6a01ab91d4da61d9bd780561b6, type: 3}
   potPlantIcon: {fileID: 1949145074}
   potIndex: 7
+  isEmpty: 1
 --- !u!114 &1954763232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5739,6 +5746,7 @@ MonoBehaviour:
   hlSprite: {fileID: 208855375, guid: 4e6f9d6a01ab91d4da61d9bd780561b6, type: 3}
   potPlantIcon: {fileID: 773420144}
   potIndex: 0
+  isEmpty: 1
 --- !u!114 &2102155995
 MonoBehaviour:
   m_ObjectHideFlags: 0
