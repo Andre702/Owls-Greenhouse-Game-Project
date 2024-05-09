@@ -23,7 +23,9 @@ public class GardenManager : MonoBehaviour
     // It will also be used when player can get information on different objects in the Garden (possibly Forest to)
 
     [SerializeField] private Water water;
-    public DialogueManager dialogueManager;
+    public DialogueManager owlDialogueBox;
+    public PlantDialogueManager plantDialogueManager;
+
 
     private void Awake()
     {
@@ -196,7 +198,7 @@ public class GardenManager : MonoBehaviour
                 (Sprite[] spriteSheet, Sprite icon) plantGraphics = GameData.instance.GetPlantGraphicsByName(plant.plantName);
 
                 GetPotOfIndex(plant.index).GetChild(1).GetComponent<PlantImage>().EnablePlant(plantGraphics.spriteSheet, plant.isHappy, plant.stage);
-                if (plant.plantName == PlantName.EMPTY)
+                if (plant.plantName == PlantName.DEAD)
                 {
                     continue;
                 }
@@ -272,15 +274,15 @@ public class GardenManager : MonoBehaviour
     public void ExplainObject(string explanation)
     {
         CursorClear();
-        dialogueManager.BeginDialogue(explanation);
+        owlDialogueBox.BeginDialogue(explanation);
     }
 
     public bool UseClock()
     {
         if (cursor.type == 2)
         {
+            ExplainObject(GameData.instance.clockDescription);
             return false;
-            // ask question about the clock
         }
         else
         {
@@ -292,14 +294,27 @@ public class GardenManager : MonoBehaviour
     {
         if (cursor.type == 2)
         {
+            ExplainObject(GameData.instance.jarDescription);
             return false;
-            // ask question about the jar
         }
         else
         {
             return true;
             // add water level [from GameData] to water bucket
         }
+    }
+
+    public void PlantStartDialogue(int index)
+    {
+        Plant targetPlant = GameData.instance.GetPlantData(index);
+
+        if (targetPlant.plantName == PlantName.DEAD)
+        {
+            ExplainObject("Dead plants don't talk my dear.");
+            return;
+        }
+
+        plantDialogueManager.BeginDialogue(targetPlant, GameData.instance.GetPlantGraphicsByName(targetPlant.plantName).icon);
     }
 
     public void GoForest()

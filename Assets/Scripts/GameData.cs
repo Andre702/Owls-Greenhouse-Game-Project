@@ -120,6 +120,8 @@ namespace DataBase
         #region Time related ============================================================================================    
 
         public int hour;
+        public string clockDescription = "This is my special Magical Watch. It will skip exactly 1 hour when used so be precise with it.\n" +
+            "The watch is powered by the greenhouse and it will not work outside of it.";
 
         public int GetHour()
         {
@@ -132,11 +134,14 @@ namespace DataBase
         }
 
         #endregion
-        // time, hour, water level needs to be added here probably
 
         #region Water ===========================================================================================
         float playerWater = 0;
         float waterChanges = 100;
+
+        public string jarDescription = "This is a Water Jug. You can use it to gather water from the nearby lake and then pour it into the barrel.\n" +
+            "It will not break but if you trip and fall it will spill some water so be careful in the forest.";
+
         public float changePlayerWater(float water) 
         {
             playerWater += water;

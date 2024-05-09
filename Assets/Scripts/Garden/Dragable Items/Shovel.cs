@@ -17,8 +17,8 @@ public class Shovel : DragableItem
 
         shovelImage = GetComponent<Image>();
 
-        itemExplanation = $"This is a Shovel. Drag it on top of one of the plants to dig it up from its pot.\n" +
-            $"Once you dug a plant you can replant it in another pot ot use left click to get rif of it.\n" +
+        itemExplanation = $"This is a Shovel. Drag it on top of one of the plants to dig it up from its pot.|" +
+            $"Once you dug a plant you can replant it in another pot ot use left click to get rif of it.|" +
             $"Be cautious as you can not replant withered plants!";
 
 

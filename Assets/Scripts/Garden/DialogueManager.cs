@@ -9,47 +9,57 @@ public class DialogueManager : MonoBehaviour
     public string[] lines;
     public float dialogueSpeed;
 
-    public bool stopDialogue = false;
+    protected int index;
+    protected Coroutine typingCoroutine;
 
-    private int index;
-    private Coroutine typing;
-
-    void Start()
+    public virtual void Start()
     {
+        index = 0;
         gameObject.SetActive(false);
         textBox.text = "";     
     }
 
-    void Update()
+    public virtual void Update()
     {
         if (Input.GetMouseButtonUp(0))
         {
-            if (textBox.text == lines[index])
-            {
-                NextLine();
-            }
-            else
-            {
-                if (typing != null)
-                {
-                    StopCoroutine(typing);
-                }
-                textBox.text = lines[index];
-            }
+            SkipDialogue();
         }
     }
 
-    public void BeginDialogue(string input)
+    public void SkipDialogue()
     {
-        lines = input.Split('\n');
+        if (textBox.text == lines[index])
+        {
+            NextLine();
+        }
+        else
+        {
+            if (typingCoroutine != null)
+            {
+                StopCoroutine(typingCoroutine);
+            }
+            textBox.text = lines[index];
+        }
+    }
+
+    public virtual void BeginDialogue(string input)
+    {
+        if (typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+        }
+
+        textBox.text = "";
+        lines = input.Split('|');
         index = 0;
         gameObject.SetActive(true);
 
-        typing = StartCoroutine(DisplayLine());
-
+        Debug.Log("BeginCoroutine");
+        typingCoroutine = StartCoroutine(DisplayLine());
     }
 
-    IEnumerator DisplayLine()
+    protected IEnumerator DisplayLine()
     {
         foreach (char c in lines[index].ToCharArray())
         {
@@ -58,31 +68,34 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    void NextLine()
+    public virtual void NextLine()
     {
-        stopDialogue = false;
         if (index < lines.Length - 1)
         {
             index++;
             textBox.text = "";
-            typing = StartCoroutine(DisplayLine());
-            
-            //if (typing == null)
-            //{
-
-            //}
-            
+            typingCoroutine = StartCoroutine(DisplayLine());
         }
         else
         {
-            textBox.text = "";
-            lines = new string[3];
-            gameObject.SetActive(false);
-            if (typing != null)
-            {
-                StopCoroutine(typing);
-            }
+            CloseDialogueBox();
         }
+    }
+
+    public void CloseDialogueBox()
+    {
+        textBox.text = "";
+        lines = new string[3];
+        gameObject.SetActive(false);
+        if (typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        CloseDialogueBox();
     }
 
     //This is the longest text that can be displayed in the dialogue box. It is quite long and right now I am writing more just because I have a space for it. The space is ending soon so aaaa

@@ -58,7 +58,8 @@ public class Plant
 
     public void Grow()
     {
-        if (stage >= 0)
+        plantAge += 1;
+        if (stage >= 0 && plantName != PlantName.DEAD)
         {
             if (isHappy == false)
             {
@@ -69,10 +70,10 @@ public class Plant
             if (plantHealth <= 0)
             {
                 KillPlant();
+                return;
             }
             else if (stage < 5)
             {
-                plantAge += 1;
                 GrowEffectList();
             }
         }
@@ -90,11 +91,14 @@ public class Plant
         isHappy = CheckNeeds();
         UpdateHappinessIcon();
     }
+    // Invokes CheckNeeds and assignes happiness state based on the value returned.
+    // Updates Happiness Icon based on current happiness state.
 
     public virtual bool CheckNeeds()
     {
         return true;
     }
+    // Checks every distinct need for this plant and returns true if all are satisfied, false if at least 1 is not
 
     public void KillPlant()
     {
@@ -129,6 +133,48 @@ public class Plant
         {
             GardenManager.instance.PlantIconChange(this.index, this.isHappy);
         }
+    }
+
+    public string FormDialogue(int flag)
+    {
+        switch (flag)
+        {
+            case 0: // Greetings
+                return Greeting();
+
+            case 1: // How do You feel?
+                return HowFeel();
+
+            case 2: // What will You need?
+                return Needs();
+
+            case 3: // How old are You?
+                return Age();
+
+            default:
+                return "Um... what?";
+        }
+           
+    }
+
+    protected virtual string Greeting()
+    {
+        return "";
+    }
+
+    protected virtual string HowFeel()
+    {
+        return "";
+    }
+
+    protected virtual string Needs()
+    {
+        return "";
+    }
+
+    protected virtual string Age()
+    {
+        return "";
     }
 
     public override string ToString()

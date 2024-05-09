@@ -14,6 +14,9 @@ public class Pot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerEx
 
     public bool isEmpty = true;
 
+    private string itemExplanation = $"This is an empty Pot. Drag your seeds here to begin growing them.";
+    private string itemExplanationPlant = $"This is a growing plant. Don't be shy, talk to it. You can't rely on me with everything.";
+
     private void Awake()
     {
         GetComponent<Image>().sprite = ogSprite;
@@ -103,6 +106,23 @@ public class Pot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerEx
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log(GameData.instance.GetPlantData(this.potIndex).ToString());
+        if (isEmpty)
+        {
+            if (GardenManager.instance.cursor.type == 2)
+            {
+                GardenManager.instance.ExplainObject(itemExplanation);
+            }
+        }
+        else
+        {
+            if (GardenManager.instance.cursor.type == 2)
+            {
+                GardenManager.instance.ExplainObject(itemExplanationPlant);
+            }
+            else
+            {
+                GardenManager.instance.PlantStartDialogue(potIndex);
+            }
+        }
     }
 }

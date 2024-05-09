@@ -19,7 +19,7 @@ public class Water : DragableItem
 
         wateringCanImage = GetComponent<Image>();
 
-        itemExplanation = $"This is a water bucket. Drag it on top of one of the plant to water it.\n" +
+        itemExplanation = $"This is a water barrel. Drag it on top of one of the plant to water it.|" +
             $"Keep track of the water level, in case you run out you will have to get more from a nearby lake.";
         
         float width = wateringCanImage.sprite.rect.width;

@@ -68,6 +68,7 @@ public class GameManager : MonoBehaviour
 
         }
     }
+
     public void InvokeSkipTime()
     {
         if (OnSkipTime != null)
