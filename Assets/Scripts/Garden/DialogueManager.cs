@@ -47,6 +47,7 @@ public class DialogueManager : MonoBehaviour
     {
         lines = input.Split('|');
         index = 0;
+        textBox.text = "";
         gameObject.SetActive(true);
 
         typingCoroutine = StartCoroutine(DisplayLine());
