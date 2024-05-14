@@ -75,19 +75,23 @@ public class Hartleaf : Plant
         {
             return true;
         }
+        if (needsToBeAlone)
+        {
+            needsToBeAlone = !GameManager.instance.PlantNeedsCheck(this.index, PlantNeed.Alone); ;
+        }
+        if (needsToBeNearOther)
+        {
+            needsToBeNearOther = !GameManager.instance.PlantNeedsCheck(this.index, PlantNeed.NearOther); ;
+        }
         if (needsWater)
         {
             return false;
         }
-        if (needsToBeAlone)
+        if (needsToBeAlone || needsToBeNearOther)
         {
-            return GameManager.instance.PlantNeedsCheck(this.index, PlantNeed.Alone);
+            return false;
         }
-        if (needsToBeNearOther)
-        {
-            return GameManager.instance.PlantNeedsCheck(this.index, PlantNeed.NearOther);
-        }
-
+        
         return true;
     }
 
@@ -100,15 +104,18 @@ public class Hartleaf : Plant
     {
         if (this.plantAge >= matureAtAge)
         {
-            return $"I am a matured Hartleaf. \nI'm currently {this.plantAge} hours old.";
+            return $"I am a matured Hartleaf. " +
+                $"\nI'm currently {this.plantAge} hours old.";
         }
         else if (this.stage <= 3)
         {
-            return $"My age? Well... I am {this.plantAge} hours old.\n I... I hope I will bloom in about {matureAtAge - this.plantAge} hours.";
+            return $"My age? Well... I am {this.plantAge} hours old." +
+                $"\n I... I hope I will bloom in about {matureAtAge - this.plantAge} hours.";
         }
         else
         {
-            return $"My age? I am {this.plantAge} hours old.\n I will achieve full bloom in {matureAtAge - this.plantAge} hours.";
+            return $"My age? I am {this.plantAge} hours old." +
+                $"\n I will achieve full bloom in {matureAtAge - this.plantAge} hours.";
         }
     }
 
@@ -128,7 +135,7 @@ public class Hartleaf : Plant
         else
         {
             string answer = "";
-            answer += "I feel... sad right now. I ";
+            answer += $"I feel... sad right now. My health is: {this.plantHealth}, but more importantly I ";
             if (needsWater) 
             { 
                 answer += "need water"; 

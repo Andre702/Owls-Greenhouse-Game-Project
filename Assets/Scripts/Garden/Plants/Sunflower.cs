@@ -43,6 +43,20 @@ public class Sunflower : Plant
         }
 
     }
+    public override bool CheckNeeds()
+    {
+        if (stage >= 5 || plantName == PlantName.DEAD)
+        {
+            return true;
+        }
+        if (needsWater)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
 
     protected override string Greeting()
     {
@@ -81,10 +95,11 @@ public class Sunflower : Plant
         else
         {
             string answer = "";
-            answer += "I feel a bit... under the weather If you know what I mean.\n I ";
+            answer += $"I feel a bit... under the weather If you know what I mean.\n" +
+                $"My health is: {this.plantHealth} and ";
             if (needsWater)
             {
-                answer += "need some water.";
+                answer += "I need some water.";
             }
 
             return answer;
@@ -95,7 +110,8 @@ public class Sunflower : Plant
     {
         if (stage >= 5)
         {
-            return "I'm a fully grown and independent Sunflower now!\n Don't worry about me, I'm all good and happy from now on.";
+            return "I'm a fully grown and independent Sunflower now!" +
+                "\n Don't worry about me, I'm all good and happy from now on.";
         }
 
         string answer = "";
@@ -117,11 +133,24 @@ public class Sunflower : Plant
             waterHours += " hours. ";
             answer += "I will love to get some water in ";
             answer += waterHours;
+
+            if (!isHappy)
+            {
+                answer += "I also... feel a bit dizzy right now.";
+            }
         }
 
         if (answer == "")
         {
-            return "I may be still growing but I will be fine from now on.\n Just give me some time and I will grow tall and strong!";
+            if (isHappy)
+            {
+                return "I may be still growing but I will be fine from now on." +
+                    "\n Just give me some time and I will grow tall and strong!";
+            }
+            return "I need one more wattering right now and I should be good to go." +
+                "\n Just give me some time and I will grow tall and strong!";
+
+
         }
 
         return answer;
