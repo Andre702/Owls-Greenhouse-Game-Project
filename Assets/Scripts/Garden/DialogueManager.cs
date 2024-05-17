@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -12,11 +13,19 @@ public class DialogueManager : MonoBehaviour
     protected int index;
     protected Coroutine typingCoroutine;
 
+    public delegate void DialogueEventHandler();
+    public static event DialogueEventHandler OnDialogueEnd;
+    public static event DialogueEventHandler OnDialogueQuest;
+
     public virtual void Start()
     {
-        index = 0;
-        textBox.text = "";
-        gameObject.SetActive(false);
+        Debug.Log("Dialoue Start Method");
+        if (typingCoroutine == null)
+        {
+            index = 0;
+            textBox.text = "";
+            gameObject.SetActive(false);
+        }
     }
 
     public virtual void Update()
@@ -45,6 +54,7 @@ public class DialogueManager : MonoBehaviour
 
     public virtual void BeginDialogue(string input)
     {
+        Debug.Log("Dialoue Begun");
         lines = input.Split('|');
         index = 0;
         textBox.text = "";
@@ -68,6 +78,14 @@ public class DialogueManager : MonoBehaviour
         {
             index++;
             textBox.text = "";
+            if (lines[index].ToCharArray()[0] == '\u200B')
+            {
+                if (OnDialogueQuest != null)
+                {
+                    OnDialogueQuest();
+                }
+            }
+
             typingCoroutine = StartCoroutine(DisplayLine());
         }
         else
@@ -85,11 +103,15 @@ public class DialogueManager : MonoBehaviour
         {
             StopCoroutine(typingCoroutine);
         }
+
+        if (OnDialogueEnd != null)
+        {
+            OnDialogueEnd();
+        }
     }
 
     private void OnDestroy()
     {
-        CloseDialogueBox();
         StopAllCoroutines();
     }
 

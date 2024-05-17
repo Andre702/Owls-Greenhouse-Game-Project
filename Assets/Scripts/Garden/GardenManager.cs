@@ -58,6 +58,15 @@ public class GardenManager : MonoBehaviour
     {
         PlantAllVisualUpdate();
         GameManager.OnSkipTime += UseClock;
+
+        if (GameData.instance.gameStartedFirstTime)
+        {
+            DialogueManager.OnDialogueQuest += DisplayQuestObjective;
+            BeginIntroductionDialogue();
+
+            //This method does not execute for some reason.
+            GameData.instance.gameStartedFirstTime = false;
+        }
     }
 
     private void Update()
@@ -277,6 +286,25 @@ public class GardenManager : MonoBehaviour
         owlDialogueBox.BeginDialogue(explanation);
     }
 
+    public void BeginIntroductionDialogue()
+    {
+            //This is the longest text that can be displayed in thhe dialogue box. It is quite long and right now I am writing more just because I have a space for it. The space is ending soon so aaaa
+        owlDialogueBox.BeginDialogue("Welcome to my Greenhouse. Here I will teach You everything I know... " +
+            "\nIf You pass my test that is.|" +
+            "The task I give You is: By the end of 24th hour You will need to grow specific plants in these pots You see in front of You.|" +
+            "I expect You to grow 3 Sunflowers, 2 Sprillias and 1 Heartleaf|" +
+            "\u200BIt may seem like a lot, however I allow You to ask me about any object you can see here. Simply click on me and point to an object You want to know more about.|" +
+            "To decide if You are worth teaching I need to see how You use my knowledge and act acordingly.|" +
+            "You should start by asking me about the seeds residing in slots at the bottom.");
+    }
+
+    public void DisplayQuestObjective()
+    {
+        // add a list of objectives and set it active here.
+
+        DialogueManager.OnDialogueQuest -= DisplayQuestObjective;
+    }
+
     public bool UseClock()
     {
         if (cursor.type == 2)
@@ -323,6 +351,11 @@ public class GardenManager : MonoBehaviour
         GameManager.instance.StartTime();
         Hud.instance.ButtonsInteractable(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.OnSkipTime -= UseClock;
     }
 
 

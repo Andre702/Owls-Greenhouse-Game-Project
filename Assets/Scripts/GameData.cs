@@ -7,10 +7,12 @@ namespace DataBase
     [System.Serializable]
     public class GameData : MonoBehaviour
     {
-        // This class is used for storage and quick recovery of all primary and persisting game data
+        // This class is used for storage and recovery of all primary and persisting game data
         
         public static GameData instance { get; private set; }
         // in order to access this instance a class must be using DataBase namespace ^
+
+        public bool gameStartedFirstTime = true;
 
         private void Awake()
         {
@@ -116,11 +118,10 @@ namespace DataBase
         }
         #endregion 
 
-
         #region Time related ============================================================================================    
 
         public int hour;
-        public string clockDescription = "This is my special Magical Watch. It will skip exactly 1 hour when used so be precise with it.\n" +
+        public string clockDescription = "This is my special Magical Watch. It will skip exactly 1 hour when used so be precise with it.|" +
             "The watch is powered by the greenhouse and it will not work outside of it.";
 
         public int GetHour()
@@ -135,11 +136,12 @@ namespace DataBase
 
         #endregion
 
-        #region Water ===========================================================================================
+        #region Water related ===========================================================================================
+        
         float playerWater = 0;
         float waterChanges = 100;
 
-        public string jarDescription = "This is a Water Jug. You can use it to gather water from the nearby lake and then pour it into the barrel.\n" +
+        public string jarDescription = "This is a Water Jug. You can use it to gather water from the nearby lake and then pour it into the barrel.|" +
             "It will not break but if you trip and fall it will spill some water so be careful in the forest.";
 
         public float changePlayerWater(float water) 
