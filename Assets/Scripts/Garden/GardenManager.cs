@@ -26,6 +26,8 @@ public class GardenManager : MonoBehaviour
     public DialogueManager owlDialogueBox;
     public PlantDialogueManager plantDialogueManager;
 
+    public QuestBoard questBoard;
+
 
     private void Awake()
     {
@@ -61,11 +63,11 @@ public class GardenManager : MonoBehaviour
 
         if (GameData.instance.gameStartedFirstTime)
         {
-            DialogueManager.OnDialogueQuest += DisplayQuestObjective;
             BeginIntroductionDialogue();
-
-            //This method does not execute for some reason.
-            GameData.instance.gameStartedFirstTime = false;
+        }
+        else
+        {
+            questBoard.ShowQuestBoard(true);
         }
     }
 
@@ -153,8 +155,8 @@ public class GardenManager : MonoBehaviour
                 newPlant = new Sprillia(index);
                 break;
 
-            case PlantName.Hartleaf:
-                newPlant = new Hartleaf(index);
+            case PlantName.Heartleaf:
+                newPlant = new Heartleaf(index);
                 break;
 
             default:
@@ -298,13 +300,6 @@ public class GardenManager : MonoBehaviour
             "You should start by asking me about the seeds residing in slots at the bottom.");
     }
 
-    public void DisplayQuestObjective()
-    {
-        // add a list of objectives and set it active here.
-
-        DialogueManager.OnDialogueQuest -= DisplayQuestObjective;
-    }
-
     public bool UseClock()
     {
         if (cursor.type == 2)
@@ -348,9 +343,7 @@ public class GardenManager : MonoBehaviour
     public void GoForest()
     {
         GameData.instance.saveWaterLevel(water.getWaterLevel());
-        GameManager.instance.StartTime();
-        Hud.instance.ButtonsInteractable(false);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        GameManager.instance.SceneChangeForest();
     }
 
     private void OnDestroy()

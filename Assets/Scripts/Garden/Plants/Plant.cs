@@ -10,7 +10,7 @@ public enum PlantName
     DEAD,
     Sunflower,
     Sprillia,
-    Hartleaf
+    Heartleaf
 }
 
 public enum PlantNeed

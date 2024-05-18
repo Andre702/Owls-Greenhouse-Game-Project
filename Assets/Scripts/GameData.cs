@@ -35,7 +35,7 @@ namespace DataBase
             plantImageMap.Add(PlantName.DEAD, (deadPlant, plantIcons[3]));
             plantImageMap.Add(PlantName.Sunflower, (sunflowerSheet, plantIcons[0]));
             plantImageMap.Add(PlantName.Sprillia, (sprilliaSheet, plantIcons[1]));
-            plantImageMap.Add(PlantName.Hartleaf, (hartleafSheet, plantIcons[2]));
+            plantImageMap.Add(PlantName.Heartleaf, (hartleafSheet, plantIcons[2]));
 
             hour = 1;
         }
@@ -62,6 +62,38 @@ namespace DataBase
                 //Debug.LogError("Invalid plant index.");
                 return new Plant();
             }
+        }
+
+        public int[] CountAdultPlants()
+        {
+            int[] plantCountarray = { 0, 0, 0 };
+            foreach (Plant p in GetAllPlants())
+            {
+                if (p.plantName != PlantName.EMPTY && p.stage >= 5)
+                {
+                    switch (p.plantName)
+                    {
+                        case PlantName.Sunflower:
+                            plantCountarray[0]++;
+                            break;
+
+                        case PlantName.Sprillia:
+                            plantCountarray[1]++;
+                            break;
+
+                        case PlantName.Heartleaf:
+                            plantCountarray[2]++;
+                            break;
+
+                        default:
+                            Debug.LogWarning($"Plant named {p.plantName} not included in wictory condition count!");
+                            break;
+
+                    }
+                }
+            }
+
+            return plantCountarray;
         }
 
         public void SetPlantData(int index, Plant data)
@@ -116,6 +148,7 @@ namespace DataBase
             }
             Debug.Log(allPlantDataString);
         }
+
         #endregion 
 
         #region Time related ============================================================================================    

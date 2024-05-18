@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Hartleaf : Plant
+public class Heartleaf : Plant
 {
     //Custom Needs:
     public bool needsToBeAlone = false;
@@ -12,9 +12,9 @@ public class Hartleaf : Plant
     private int aloneUntill = 5;
     private int nearOtherFrom = 12;
     private int matureAtAge = 14;
-    public Hartleaf(int _index) : base(_index)
+    public Heartleaf(int _index) : base(_index)
     {
-        plantName = PlantName.Hartleaf;
+        plantName = PlantName.Heartleaf;
         plantAge = 0;
         plantHealth = 5;
         isHappy = true;
@@ -97,14 +97,14 @@ public class Hartleaf : Plant
 
     protected override string Greeting()
     {
-        return $"O... hi. I'm a Hartleaf. I grow int pot {index}";
+        return $"O... hi. I'm a Heartleaf. I grow int pot {index}";
     }
 
     protected override string Age()
     {
         if (this.plantAge >= matureAtAge)
         {
-            return $"I am a matured Hartleaf. " +
+            return $"I am a matured Heartleaf. " +
                 $"\nI'm currently {this.plantAge} hours old.";
         }
         else if (this.stage <= 3)

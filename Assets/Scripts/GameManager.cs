@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DataBase;
+using UnityEngine.SceneManagement;
 
 
 public class GameManager : MonoBehaviour
@@ -19,6 +20,9 @@ public class GameManager : MonoBehaviour
     private bool timeIsFlowing = false;
     private float currentTime = 0f;
 
+    public int[] quest = { 3, 2, 1 };
+    public QuestBoard questBoard;
+
     public bool isSceneGarden = true;
 
     private void Awake()
@@ -33,6 +37,14 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    private void Start()
+    {
+        if (GameData.instance.gameStartedFirstTime)
+        {
+            DialogueManager.OnDialogueQuest += QuestDisplayObjective;
+        }
+    }
+
     private void Update()
     {
         if (timeIsFlowing)
@@ -43,15 +55,90 @@ public class GameManager : MonoBehaviour
         if (currentTime >= secondsInHour)
         {
             currentTime = 0f;
-            NextHour();
+            TimeNextHour();
 
             Debug.Log("Hour passes");
         }
     }
 
+    public void QuestUpdateCondition()
+    {
+        int[] currentState = GameData.instance.CountAdultPlants();
+
+        if (currentState.Length != quest.Length)
+        {
+            Debug.LogWarning("Lengths of quest array and current state array differ! If new plant was added check the arrays for missing spot!");
+            return;
+        }
+
+        questBoard.UpdateQuestBoard(currentState);
+
+        bool endFlag = true;
+        for (int i = 0; i < quest.Length; i++)
+        {
+            if (currentState[i] != quest[i])
+            {
+                endFlag = false;
+                break;
+            }
+        }
+
+        if (endFlag)
+        {
+            EndGame();
+        }
+    }
+
+    public void QuestDisplayObjective()
+    {
+        GameData.instance.gameStartedFirstTime = false;
+        questBoard.SetupQuestBoard(quest);
+        questBoard.ShowQuestBoard(true);
+        DialogueManager.OnDialogueQuest -= QuestDisplayObjective;
+    }
+
+    public void TimeInvokeSkip()
+    {
+        if (OnSkipTime != null)
+        {
+            if (OnSkipTime())
+            {
+                TimeNextHour();
+            }
+            else
+            {
+                Debug.Log("Time Skip prevented by event from Garden");
+            }
+        }
+        else
+        {
+            TimeNextHour();
+        }
+    }
+
+    public void TimeNextHour()
+    {
+        GameData.instance.IncrementHour();
+        PlantAllGrow();
+        PlantAllCheckHappiness();
+        Hud.instance.UpdateHourDisplay();
+        QuestUpdateCondition();
+    }
+
+    public void TimeStart()
+    {
+        timeIsFlowing = true;
+    }
+
+    public void TimeStop()
+    {
+        timeIsFlowing = false;
+        currentTime = 0f;
+    }
+
     public bool PlantNeedsCheck(int plantIndex, PlantNeed need)
     {
-        
+
         switch (need)
         {
             case PlantNeed.Alone:
@@ -67,44 +154,6 @@ public class GameManager : MonoBehaviour
                 return false;
 
         }
-    }
-
-    public void InvokeSkipTime()
-    {
-        if (OnSkipTime != null)
-        {
-            if (OnSkipTime())
-            {
-                NextHour();
-            }
-            else
-            {
-                Debug.Log("Time Skip prevented by event from Garden");
-            }
-        }
-        else
-        {
-            NextHour();
-        }
-    }
-
-    public void NextHour()
-    {
-        GameData.instance.IncrementHour();
-        PlantAllGrow();
-        PlantAllCheckHappiness();
-        Hud.instance.UpdateHourDisplay();
-    }
-
-    public void StartTime()
-    {
-        timeIsFlowing = true;
-    }
-
-    public void StopTime()
-    {
-        timeIsFlowing = false;
-        currentTime = 0f;
     }
 
     public void PlantAllGrow(int growth = 1)
@@ -128,5 +177,27 @@ public class GameManager : MonoBehaviour
                 plantData.CheckHappiness();
             }
         }
+    }
+
+    public void SceneChangeForest()
+    {
+        TimeStart();
+        questBoard.ShowQuestBoard(false);
+        Hud.instance.ButtonsInteractable(false);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
+    public void SceneChangeGreenhouse()
+    {
+        TimeStop();
+        Hud.instance.ButtonsInteractable(true);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+        questBoard.ShowQuestBoard(false);
+    }
+
+    private void EndGame()
+    {
+
+
     }
 }
