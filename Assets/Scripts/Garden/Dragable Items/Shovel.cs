@@ -9,6 +9,8 @@ public class Shovel : DragableItem
     private Vector2 shovelDimensions;
     private Quaternion ogRotation;
 
+    private AudioManagerGarden audioManager;
+
     protected override void Awake()
     {
         base.Awake();
@@ -28,10 +30,9 @@ public class Shovel : DragableItem
         ogRotation = shovelImage.rectTransform.rotation;
 
         canvasGroup.alpha = 0;
-        
 
-        pickupSound = "Clank"; // Replace those with actual sounds xd
-        useSound = "Kshch";
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManagerGarden>();
+
     }
 
     protected override void BeginDragEffect()
@@ -40,6 +41,7 @@ public class Shovel : DragableItem
 
         if (canBeUsed)
         {
+            audioManager.PlaySFX(audioManager.shovel);
             RectTransform rectTransform = GetComponent<Image>().rectTransform;
             rectTransform.sizeDelta = shovelDimensions;
             rectTransform.rotation = Quaternion.Euler(0, 0, 0);

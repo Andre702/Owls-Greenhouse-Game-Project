@@ -11,6 +11,8 @@ public class Seed : DragableItem
 
     private bool unlocked;
 
+    private AudioManagerGarden audioManager;
+
     protected override void Awake()
     {
         base.Awake();
@@ -22,8 +24,9 @@ public class Seed : DragableItem
         canBeUsed = true; // Seeds need to check if they are unlocked at this game level
                           // and then determine weather or not they can be used yet
 
-        pickupSound = "Hszz"; // Replace those with actual sounds xd
-        useSound = "Blink";
+        
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManagerGarden>();
+
 
         unlocked = true; // This will depend on the world script and state of the game
     }
@@ -34,6 +37,7 @@ public class Seed : DragableItem
 
         if (canBeUsed & unlocked)
         {
+            audioManager.PlaySFX(audioManager.planting);
             canvasGroup.alpha = 0.6f;
         }
 

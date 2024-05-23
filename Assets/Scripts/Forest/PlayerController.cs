@@ -18,6 +18,13 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Button button;
 
+    AudioManagerForest audioManager;
+
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManagerForest>();
+    }
+
     void Start()
     {
         targetPosition = transform.position;
@@ -94,11 +101,13 @@ public class PlayerController : MonoBehaviour
 
     private void collideWithWater()
     {
+        audioManager.PlaySFX(audioManager.water_lake);
         GameData.instance.changePlayerWater(100);
     }
 
     private void collideWithEnemy()
     {
+        audioManager.PlaySFX(audioManager.hog);
         transform.position = spawnPoint;
         GameData.instance.changePlayerWater(-70);
     }

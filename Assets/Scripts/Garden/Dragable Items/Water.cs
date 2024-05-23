@@ -10,6 +10,7 @@ public class Water : DragableItem
     private Image wateringCanImage;
     private Vector2 wateringCanDimensions;
 
+    private AudioManagerGarden audioManager;
 
     protected override void Awake()
     {
@@ -34,6 +35,8 @@ public class Water : DragableItem
 
         UpdateWaterLevel();
 
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManagerGarden>();
+
     }
 
     protected override void BeginDragEffect()
@@ -42,6 +45,7 @@ public class Water : DragableItem
 
         if (canBeUsed & waterLevel > 10)    
         {
+            audioManager.PlaySFX(audioManager.water_barrel);
             RectTransform rectTransform = wateringCanImage.rectTransform;
             rectTransform.sizeDelta = wateringCanDimensions;
             canvasGroup.alpha = 1;
