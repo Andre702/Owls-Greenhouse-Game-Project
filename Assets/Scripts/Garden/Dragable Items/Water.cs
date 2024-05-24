@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Water : DragableItem
 {
-    public float waterLevel = 100;
+    public float waterLevel = 0;
 
     private Image wateringCanImage;
     private Vector2 wateringCanDimensions;
@@ -29,9 +29,6 @@ public class Water : DragableItem
        
         canvasGroup.alpha = 0;
         // Watering can is invisible and it's hitbox is enlarged
-
-        pickupSound = "Flop"; // Replace those with actual sounds xd
-        useSound = "Flush";
 
         UpdateWaterLevel();
 
