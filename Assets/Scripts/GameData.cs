@@ -182,6 +182,7 @@ namespace DataBase
             playerWater += water;
             if (playerWater > 100) playerWater = 100;
             if (playerWater < 0) playerWater = 0;
+            Hud.instance.UpdateWaterDisplay();
             return playerWater;
         }
 
@@ -193,6 +194,7 @@ namespace DataBase
         public void resetPlayerWater()
         {
             playerWater = 0;
+            Hud.instance.UpdateWaterDisplay();
         }
 
         public void saveWaterLevel(float water)

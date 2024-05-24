@@ -31,7 +31,7 @@ public class Hud : MonoBehaviour
     private void Start()
     {
         UpdateHourDisplay();
-        UpdateHourDisplay();
+        UpdateWaterDisplay();
     }
 
     public void UpdateHourDisplay()
@@ -41,7 +41,7 @@ public class Hud : MonoBehaviour
 
     public void UpdateWaterDisplay()
     {
-        //jar.text = GameData.instance.GetWater().ToString();
+        jarText.text = GameData.instance.getPlayerWater().ToString();
     }
 
     public void ButtonsInteractable(bool state)
