@@ -192,7 +192,7 @@ public class GameManager : MonoBehaviour
         TimeStop();
         Hud.instance.ButtonsInteractable(true);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
-        questBoard.ShowQuestBoard(false);
+        questBoard.ShowQuestBoard(true);
     }
 
     private void EndGame()

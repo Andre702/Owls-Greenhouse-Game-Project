@@ -65,10 +65,6 @@ public class GardenManager : MonoBehaviour
         {
             BeginIntroductionDialogue();
         }
-        else
-        {
-            questBoard.ShowQuestBoard(true);
-        }
     }
 
     private void Update()
