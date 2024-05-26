@@ -19,19 +19,9 @@ public class QuestBoard : MonoBehaviour
 
     public void UpdateQuestBoard(int[] adultPlants)
     {
-        sunflowers.text.ToCharArray()[0] = (char)adultPlants[0];
-        sprillias.text.ToCharArray()[0] = (char)adultPlants[1];
-        heartleaf.text.ToCharArray()[0] = (char)adultPlants[2];
+        sunflowers.text = $"{adultPlants[0]} / 3";
+        sprillias.text = $"{adultPlants[1]} / 2";
+        heartleaf.text = $"{adultPlants[2]} / 1";
     }
 
-    public void ShowQuestBoard(bool show)
-    {
-        this.gameObject.SetActive(show);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

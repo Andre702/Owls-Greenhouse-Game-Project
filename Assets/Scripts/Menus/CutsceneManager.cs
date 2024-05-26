@@ -9,7 +9,7 @@ public class CutsceneManager : MonoBehaviour
     public DialogueManager dialogueBox;
     public GameObject greenhouseView;
 
-    private bool dialogueFinished = false;
+    protected bool dialogueFinished = false;
 
     void Start()
     {
@@ -24,7 +24,7 @@ public class CutsceneManager : MonoBehaviour
         animator.SetTrigger("FadeOut");
     }
 
-    public void ProgressCutscene()
+    public virtual void ProgressCutscene()
     {
         if (!dialogueFinished)
         {
@@ -38,13 +38,11 @@ public class CutsceneManager : MonoBehaviour
         {
             NextScene();
         }
-        
-
     }
 
-    public void GreenhouseView()
+    public virtual void FinishCutscene()
     {
-        Debug.Log("Greehouse view fade in");
+        //Debug.Log("Greehouse view fade in");
         animator.SetTrigger("FadeIn");
         greenhouseView.SetActive(true);
     }

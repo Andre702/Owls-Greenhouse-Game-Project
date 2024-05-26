@@ -12,7 +12,7 @@ public class CutsceneFadeAnimation : MonoBehaviour
 
     public void OnFadeOutComplete()
     {
-        cutsceneManager.GreenhouseView();
+        cutsceneManager.FinishCutscene();
     }
 
 }

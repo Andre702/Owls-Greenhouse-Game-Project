@@ -54,7 +54,7 @@ public class DialogueManager : MonoBehaviour
 
     public virtual void BeginDialogue(string input)
     {
-        Debug.Log("Dialoue Begun");
+        //Debug.Log("Dialoue Begun");
         lines = input.Split('|');
         index = 0;
         textBox.text = "";

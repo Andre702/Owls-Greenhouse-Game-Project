@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DataBase;
-using System.Reflection;
-using System;
 
 public class ForestManager : MonoBehaviour
 {

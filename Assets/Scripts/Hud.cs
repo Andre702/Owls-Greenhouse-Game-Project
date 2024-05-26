@@ -41,7 +41,7 @@ public class Hud : MonoBehaviour
 
     public void UpdateWaterDisplay()
     {
-        jarText.text = GameData.instance.getPlayerWater().ToString();
+        jarText.text = GameData.instance.GetPlayerWater().ToString();
     }
 
     public void ButtonsInteractable(bool state)

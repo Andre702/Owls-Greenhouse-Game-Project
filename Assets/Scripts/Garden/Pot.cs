@@ -119,7 +119,7 @@ public class Pot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerEx
             {
                 GardenManager.instance.ExplainObject(itemExplanationPlant);
             }
-            else
+            else if (GardenManager.instance.cursor.type == 0)
             {
                 GardenManager.instance.PlantStartDialogue(potIndex);
             }

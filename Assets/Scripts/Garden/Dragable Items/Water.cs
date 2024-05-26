@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Water : DragableItem
 {
-    public float waterLevel = 0;
+    public float waterLevel;
 
     private Image wateringCanImage;
     private Vector2 wateringCanDimensions;
@@ -29,8 +29,6 @@ public class Water : DragableItem
        
         canvasGroup.alpha = 0;
         // Watering can is invisible and it's hitbox is enlarged
-
-        UpdateWaterLevel();
 
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManagerGarden>();
 
@@ -63,7 +61,7 @@ public class Water : DragableItem
 
         if (wasUsed)
         {
-            waterLevel -= 20;
+            //waterLevel -= 20;
             UpdateWaterLevel();
         }
     }
@@ -75,20 +73,35 @@ public class Water : DragableItem
         GameObject.Find("WaterLevel").transform.localScale = new Vector3(1, waterPercentage, 1);
     }
 
-    public void AddWater(float amountAdded, float water)
+    public void SetWaterLevel(float water)
     {
-        if (water + amountAdded <= 100)
+        if (water <= 100 && water >= 0)
         {
-            waterLevel = amountAdded + water;
-        }
-        else 
-        {
-            waterLevel = 100;
+            waterLevel = water;
         }
         UpdateWaterLevel();
     }
 
-    public float getWaterLevel()
+    public float AddWater(float amountAdded)
+    {
+        waterLevel += amountAdded;
+        if (waterLevel > 100)
+        {
+            float excessWater = waterLevel - 100;
+            waterLevel = 100;
+            UpdateWaterLevel();
+
+            return excessWater;
+        }
+        else 
+        {
+            UpdateWaterLevel();
+            return 0;
+        }
+        
+    }
+
+    public float GetWaterLevel()
     {
         return waterLevel;
     }

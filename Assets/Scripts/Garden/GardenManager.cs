@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DataBase;
-using UnityEngine.SceneManagement;
 
 public class GardenManager : MonoBehaviour
 {
@@ -13,20 +12,18 @@ public class GardenManager : MonoBehaviour
     public Transform[] pots;
     // list of pots references: used for planting system, relocating and 
 
-    public Transform gameCanvas;
-    // canvas reference: used for moving dragable objects closer to the camera so they won't be obscured
-
-    //public GardenCursor cursor;
     public (bool isFull, int type, Plant plant, int targetPotIndex) cursor;
     public CursorImage cursorImage;
+    private bool cursorQueueClear = false;
     // cursor: a small container that player can move and use for storing single plant data and relocating it
     // It will also be used when player can get information on different objects in the Garden (possibly Forest to)
 
-    [SerializeField] private Water water;
+    [SerializeField] private Water waterBarrel;
     public DialogueManager owlDialogueBox;
     public PlantDialogueManager plantDialogueManager;
 
     public QuestBoard questBoard;
+    public GameObject darkenedScreen;
 
 
     private void Awake()
@@ -40,31 +37,87 @@ public class GardenManager : MonoBehaviour
         instance = this;
     }
 
-    private void OnEnable()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    private void OnDisable()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        water.AddWater(GameData.instance.getPlayerWater(), GameData.instance.getWaterSaved());
-        GameData.instance.resetPlayerWater();
-    }
-
     private void Start()
     {
-        PlantAllVisualUpdate();
-        GameManager.OnSkipTime += UseClock;
-
         if (GameData.instance.gameStartedFirstTime)
         {
             BeginIntroductionDialogue();
         }
+        else
+        {
+            GameManager.instance.QuestBoardShow(true);
+        }
+
+        PlantAllVisualUpdate();
+        GameManager.OnSkipTime += UseClock;
+        GameManager.OnWaterUse += UseJar;
+
+        waterBarrel.SetWaterLevel(GameData.instance.GetWaterLevel());
+
+        GameData.instance.SetPlayerWater(
+            waterBarrel.AddWater(
+                GameData.instance.GetPlayerWater())
+            );
+    }
+
+    private void GoEndScreen()
+    {
+        DialogueManager.OnDialogueEnd -= GoEndScreen;
+
+        GameManager.instance.QuestBoardShow(false);
+
+        GameManager.instance.SceneChangeEndScreen();
+    }
+
+    private void FinishTheGame()
+    {
+        darkenedScreen.SetActive(true);
+
+        DialogueManager.OnDialogueEnd += GoEndScreen;
+
+        if (!GameManager.instance.QuestUpdateCondition())
+        {
+            owlDialogueBox.BeginDialogue("Well well the student returns at the end of the time I gave him...|" +
+                "I am sory my dear, but you failed to complete my task and thus I deam You not worthy of recieving my teachings.|" +
+                "Do not despair child. Learn more. Return to me in couple of years and take my test again. I will be waiting.");
+
+            return;
+        }
+
+        int score = 0;
+
+        foreach (Plant p in GameData.instance.GetAllPlants())
+        {
+            if (p.stage >= 5)
+            {
+                score += p.plantHealth;
+            }
+        }
+
+        GameData.instance.score += score;
+
+        string finishingDialogue = "It would seem the student returns... My student that is.|" +
+                "Congratulations my dear. You have passed my test. ";
+
+        if (score == 21)
+        {
+            finishingDialogue += "And with a perfect mark as well!|" +
+                "For Your work I would give you a perfect 21 out of 21 points.|" +
+                "Now then... I will teach You everything I know.";
+        }
+        else if (score > 21)
+        {
+            finishingDialogue += "And You even managed to exceede my expectations!|" +
+                "For Your work I would give you a score of " + score + " out of 21 points!|" +
+                "Now then... I will teach You everything I know.";
+        }
+        else
+        {
+            finishingDialogue += "|For Your work I would give you a score of " + score + " out of 21 points.|" +
+                "Now then... I will teach You everything I know.";
+        }
+
+        owlDialogueBox.BeginDialogue(finishingDialogue);
     }
 
     private void Update()
@@ -83,7 +136,7 @@ public class GardenManager : MonoBehaviour
                 {
                     if (PlantAtemptRelocate())
                     {
-                        CursorClear();
+                        cursorQueueClear = true;
                     }
                 }
                 else if (cursor.type == 2)
@@ -93,7 +146,19 @@ public class GardenManager : MonoBehaviour
                 
             }
         }
-        
+
+        if (Input.GetMouseButtonUp(0) && cursorQueueClear)
+        {
+            CursorClear();
+            cursorQueueClear = false;
+        }
+
+        if (GameData.instance.gameFinished)
+        {
+            GameData.instance.gameFinished = false;
+            FinishTheGame();
+        }
+
     }
 
     public Transform GetPotOfIndex(int index)
@@ -109,6 +174,7 @@ public class GardenManager : MonoBehaviour
         return null;
     }
     // As A special pinvisible plant of index 4 was added this function helps to safetely get the right pot with the right index.
+    
     public void PlantDigUp(int index)
     {
         if (GameData.instance.GetPlantData(index).plantName == PlantName.EMPTY)
@@ -196,6 +262,7 @@ public class GardenManager : MonoBehaviour
         plantImageTarget.UpdateCurrentSprite(-1, isHappy);
     }
     // Changes only an icon. Works faster than PlantVisualChange when it is not necessary
+    
     public void PlantAllVisualUpdate()
     {
         foreach (var plant in GameData.instance.GetAllPlants())
@@ -271,18 +338,21 @@ public class GardenManager : MonoBehaviour
             cursorImage.Enable(cursor.type); ;
         }
     }
+    // Envoked by digging up a plant. Sets cursor to hold Plant data
 
     public void CursorSetQuestion()
     {
         cursor = (false, 2, null, -1);
         cursorImage.Enable(2);
     }
+    // Envoked by clicking on the Owl. Sets cursor to question mode
 
     public void ExplainObject(string explanation)
     {
         CursorClear();
         owlDialogueBox.BeginDialogue(explanation);
     }
+    // Starts a dialogue with an Owl based on string variable explanation provided.
 
     public void BeginIntroductionDialogue()
     {
@@ -308,6 +378,8 @@ public class GardenManager : MonoBehaviour
             return true;
         }
     }
+    // Envoked with an event of using a Clock.
+    // Prevents usage of an item if the cursor was in the question mode, provides explanation of the item instead.
 
     public bool UseJar()
     {
@@ -318,10 +390,16 @@ public class GardenManager : MonoBehaviour
         }
         else
         {
+            GameData.instance.SetPlayerWater(
+            waterBarrel.AddWater(
+                GameData.instance.GetPlayerWater())
+            );
+
             return true;
-            // add water level [from GameData] to water bucket
         }
     }
+    // Envoked with an event of using a Jar.
+    // Prevents usage of an item if the cursor was in the question mode, provides explanation of the item instead.
 
     public void PlantStartDialogue(int index)
     {
@@ -335,16 +413,18 @@ public class GardenManager : MonoBehaviour
 
         plantDialogueManager.BeginDialogue(targetPlant, GameData.instance.GetPlantGraphicsByName(targetPlant.plantName).icon);
     }
+    // Envoked by clicking on filled pot. Starts the dialogue with a plant of given index
 
     public void GoForest()
     {
-        GameData.instance.saveWaterLevel(water.getWaterLevel());
+        GameData.instance.SaveWaterLevel(waterBarrel.waterLevel);
         GameManager.instance.SceneChangeForest();
     }
 
     private void OnDestroy()
     {
         GameManager.OnSkipTime -= UseClock;
+        GameManager.OnWaterUse -= UseJar;
     }
 
 

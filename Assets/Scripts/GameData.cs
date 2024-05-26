@@ -12,7 +12,9 @@ namespace DataBase
         public static GameData instance { get; private set; }
         // in order to access this instance a class must be using DataBase namespace ^
 
-        public bool gameStartedFirstTime = true;
+        public bool gameStartedFirstTime = false;
+        public bool gameFinished = true;
+        public int score = 0;
 
         private void Awake()
         {
@@ -38,6 +40,8 @@ namespace DataBase
             plantImageMap.Add(PlantName.Heartleaf, (hartleafSheet, plantIcons[2]));
 
             hour = 1;
+            barrelWater = 40;
+            playerWater = 0;
         }
 
         #region Plant related ============================================================================================
@@ -171,13 +175,13 @@ namespace DataBase
 
         #region Water related ===========================================================================================
         
-        float playerWater = 0;
-        float waterChanges = 100;
+        private float playerWater;
+        private float barrelWater;
 
-        public string jarDescription = "This is a Water Jug. You can use it to gather water from the nearby lake and then pour it into the barrel.|" +
+        public string jarDescription = "This is a Water Jar. You can use it to gather water from the nearby lake and then pour it into the barrel.|" +
             "It will not break but if you trip and fall it will spill some water so be careful in the forest.";
 
-        public float changePlayerWater(float water) 
+        public float AddPlayerWater(float water) 
         {
             playerWater += water;
             if (playerWater > 100) playerWater = 100;
@@ -186,25 +190,25 @@ namespace DataBase
             return playerWater;
         }
 
-        public float getPlayerWater()
+        public float GetPlayerWater()
         {
             return playerWater;
         }
 
-        public void resetPlayerWater()
+        public void SetPlayerWater(float water)
         {
-            playerWater = 0;
+            playerWater = water;
             Hud.instance.UpdateWaterDisplay();
         }
 
-        public void saveWaterLevel(float water)
+        public void SaveWaterLevel(float water)
         {
-            waterChanges = water;
+            barrelWater = water;
         }
 
-        public float getWaterSaved()
+        public float GetWaterLevel()
         {
-            return waterChanges;
+            return barrelWater;
         }
         #endregion
     }

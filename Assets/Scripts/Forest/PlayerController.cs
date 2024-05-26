@@ -102,14 +102,14 @@ public class PlayerController : MonoBehaviour
     private void collideWithWater()
     {
         audioManager.PlaySFX(audioManager.water_lake);
-        GameData.instance.changePlayerWater(100);
+        GameData.instance.AddPlayerWater(100);
     }
 
     private void collideWithEnemy()
     {
         audioManager.PlaySFX(audioManager.hog);
         transform.position = spawnPoint;
-        GameData.instance.changePlayerWater(-70);
+        GameData.instance.AddPlayerWater(-70);
     }
 
     private void switchButton(bool state)

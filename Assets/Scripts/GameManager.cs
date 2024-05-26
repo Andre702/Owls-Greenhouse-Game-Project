@@ -9,8 +9,9 @@ public class GameManager : MonoBehaviour
 {
     // This class is used for functions used in both Garden and Forest
 
-    public delegate bool SkipTimeHandler();
-    public static event SkipTimeHandler OnSkipTime;
+    public delegate bool HudItemUseHandler();
+    public static event HudItemUseHandler OnSkipTime;
+    public static event HudItemUseHandler OnWaterUse;
 
     public static GameManager instance { get; private set; }
     // instance of GameManager needs to be accessible from every scene
@@ -61,14 +62,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void QuestUpdateCondition()
+    public bool QuestUpdateCondition()
     {
         int[] currentState = GameData.instance.CountAdultPlants();
 
         if (currentState.Length != quest.Length)
         {
             Debug.LogWarning("Lengths of quest array and current state array differ! If new plant was added check the arrays for missing spot!");
-            return;
+            return false;
         }
 
         questBoard.UpdateQuestBoard(currentState);
@@ -85,15 +86,17 @@ public class GameManager : MonoBehaviour
 
         if (endFlag)
         {
-            EndGame();
+            return true;
         }
+
+        return false;
     }
 
     public void QuestDisplayObjective()
     {
         GameData.instance.gameStartedFirstTime = false;
         questBoard.SetupQuestBoard(quest);
-        questBoard.ShowQuestBoard(true);
+        QuestBoardShow(true);
         DialogueManager.OnDialogueQuest -= QuestDisplayObjective;
     }
 
@@ -116,13 +119,43 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void WaterInvokeUse()
+    {
+        if (OnWaterUse != null)
+        {
+            if (OnWaterUse())
+            {
+                Debug.Log("Water should have been poured.");
+            }
+            else
+            {
+                Debug.Log("Time Skip prevented by event from Garden");
+            }
+        }
+        else
+        {
+            
+        }
+    }
+
     public void TimeNextHour()
     {
-        GameData.instance.IncrementHour();
-        PlantAllGrow();
-        PlantAllCheckHappiness();
-        Hud.instance.UpdateHourDisplay();
-        QuestUpdateCondition();
+        if (GameData.instance.hour <= 24)
+        {
+            GameData.instance.IncrementHour();
+            PlantAllGrow();
+            PlantAllCheckHappiness();
+            Hud.instance.UpdateHourDisplay();
+            if (QuestUpdateCondition())
+            {
+                EndGame(false);
+            }
+        }
+        else
+        {
+            EndGame(true);
+        }
+        
     }
 
     public void TimeStart()
@@ -149,6 +182,14 @@ public class GameManager : MonoBehaviour
                     return true;
                 }
                 return false;
+            case PlantNeed.NearOther:
+                if (GameData.instance.GetPlantData(plantIndex - 1).plantName == PlantName.EMPTY &&
+                    GameData.instance.GetPlantData(plantIndex + 1).plantName == PlantName.EMPTY
+                    )
+                {
+                    return false;
+                }
+                return true;
             default:
                 Debug.LogWarning("Need not implemented yet!");
                 return false;
@@ -182,7 +223,7 @@ public class GameManager : MonoBehaviour
     public void SceneChangeForest()
     {
         TimeStart();
-        questBoard.ShowQuestBoard(false);
+        QuestBoardShow(false);
         Hud.instance.ButtonsInteractable(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
@@ -191,13 +232,30 @@ public class GameManager : MonoBehaviour
     {
         TimeStop();
         Hud.instance.ButtonsInteractable(true);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
-        questBoard.ShowQuestBoard(true);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1); 
     }
 
-    private void EndGame()
+    public void SceneChangeEndScreen()
     {
+        SceneManager.LoadScene(4);
+    }
 
+    public void QuestBoardShow(bool show)
+    {
+        questBoard.gameObject.SetActive(show);
+    }
+
+    private void EndGame(bool forced)
+    {
+        TimeStop();
+        Hud.instance.ButtonsInteractable(false);
+
+        GameData.instance.gameFinished = true;
+
+        if (forced)
+        {
+            SceneManager.LoadScene(2);
+        }
 
     }
 }
