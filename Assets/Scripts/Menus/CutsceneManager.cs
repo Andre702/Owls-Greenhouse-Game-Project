@@ -30,7 +30,7 @@ public class CutsceneManager : MonoBehaviour
         {
             dialogueBox.BeginDialogue("Oh... What's that? A lost elvish child?|" +
             "I see You seek knowledge of botany. You wish to learn from me...|" +
-            "Wery well. I shall take You as my apprentice, however...|" +
+            "Very well. I shall take You as my apprentice, however...|" +
             "You need to prove to me that You are worthy of my knowledge.|" +
             "We will begin with a test. Come with me.");
         }

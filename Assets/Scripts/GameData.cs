@@ -179,7 +179,7 @@ namespace DataBase
         private float barrelWater;
 
         public string jarDescription = "This is a Water Jar. You can use it to gather water from the nearby lake and then pour it into the barrel.|" +
-            "It will not break but if you trip and fall it will spill some water so be careful in the forest.";
+            "It will not break but if You trip and fall it will spill some water so be careful in the forest.";
 
         public float AddPlayerWater(float water) 
         {

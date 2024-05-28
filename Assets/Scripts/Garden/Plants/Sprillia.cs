@@ -80,7 +80,7 @@ public class Sprillia : Plant
         else
         {
             return $"How rude of you to ask a lady her age! " +
-                $"\nWell If You need to know then I am {this.plantAge} hours old and shall bloom in {matureAtAge - this.plantAge} hours.";
+                $"\nWell If you need to know then I am {this.plantAge} hours old and shall bloom in {matureAtAge - this.plantAge} hours.";
         }
     }
 
@@ -90,13 +90,13 @@ public class Sprillia : Plant
         {
             if (this.plantHealth == 2)
             {
-                return $"I'm feeling fine thank You." +
-                    $"\nHowever I will have You know that I'm a delicate plant. My health is currently: {this.plantHealth}.";
+                return $"I'm feeling fine thank you." +
+                    $"\nHowever I will have you know that I'm a delicate plant. My health is currently: {this.plantHealth}.";
             }
             else // HP == 1
             {
                 return $"I'm fine, however my health is only: {this.plantHealth}." +
-                    $"\nHow shamefull of you to not tend to my needs!";
+                    $"\nHow shameful of you to not tend to my needs!";
             }
         }
         else
@@ -116,7 +116,7 @@ public class Sprillia : Plant
     {
         if (stage >= 5)
         {
-            return "How nice of You to still tend to my needs even though I am a matured plant. Your service shall not be forgotten";
+            return "How nice of you to still tend to my needs even though I am a matured plant. Your service shall not be forgotten.";
         }
 
         
@@ -139,7 +139,7 @@ public class Sprillia : Plant
         {
             if (!isHappy)
             {
-                return "How about You tend to my current needs before you ask what would be the next one!?";
+                return "How about you tend to my current needs before you ask what would be the next one!?";
             }
 
             waterHours += " hours. ";
@@ -151,7 +151,7 @@ public class Sprillia : Plant
         {
             if (isHappy)
             {
-                return "I won't need Your help anymore. My flowers shall bloom soon! Gosh I can't wait.";
+                return "I won't need your help anymore. My flowers shall bloom soon! Gosh I can't wait.";
             }
 
             return "I won't need anything later, but I want something NOW!" +

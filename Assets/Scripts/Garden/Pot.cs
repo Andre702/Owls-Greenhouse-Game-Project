@@ -15,7 +15,7 @@ public class Pot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerEx
     public bool isEmpty = true;
 
     private string itemExplanation = $"This is an empty Pot. Drag your seeds here to begin growing them.";
-    private string itemExplanationPlant = $"This is a growing plant. Don't be shy, talk to it. You can't rely on me with everything.";
+    private string itemExplanationPlant = $"This is a growing plant. Don't be shy, talk to them. You can't rely on me for everything.";
 
     private void Awake()
     {

@@ -299,10 +299,10 @@ public class GardenManager : MonoBehaviour
     {
         owlDialogueBox.BeginDialogue("Welcome to my Greenhouse. Here I will teach You everything I know... " +
             "\nIf You pass my test that is.|" +
-            "The task I give You is: By the end of 24th hour You will need to grow specific plants in these pots You see in front of You.|" +
+            "The task I give You is: By the end of the 24th hour You will need to grow specific plants in these pots You see in front of You.|" +
             "I expect You to grow 3 Sunflowers, 2 Sprillias and 1 Heartleaf|" +
-            "\u200BIt may seem like a lot, however I allow You to ask me about any object you can see here. Simply click on me and point to an object You want to know more about.|" +
-            "To decide if You are worth teaching I need to see how You use my knowledge and act acordingly.|" +
+            "\u200BIt may seem like a lot, however I allow You to ask me about any object You can see here. Simply click on me and point to an object You want to know more about.|" +
+            "To decide if You are worth teaching I need to see how You use my knowledge and act accordingly.|" +
             "You should start by asking me about the seeds residing in slots at the bottom.");
 
         DialogueManager.OnDialogueEnd += UnlockGardenObjects;
@@ -383,7 +383,7 @@ public class GardenManager : MonoBehaviour
         if (!GameManager.instance.QuestUpdateCondition())
         {
             owlDialogueBox.BeginDialogue("Well well the student returns at the end of the time I gave him...|" +
-                "I am sory my dear, but you failed to complete my task and thus I deam You unworthy of recieving my teachings.|" +
+                "I am sory my dear, but You failed to complete my task and thus I deem You unworthy of receiving my teachings.|" +
                 "Do not despair child. Learn more. Return to me in couple of years and take my test again. I will be waiting.");
 
             return;
@@ -407,18 +407,18 @@ public class GardenManager : MonoBehaviour
         if (score == 21)
         {
             finishingDialogue += "And with a perfect mark as well!|" +
-                "For Your work I would give you a perfect 21 out of 21 points.|" +
+                "For Your work I will give You a perfect 21 out of 21 points.|" +
                 "Now then... I will teach You everything I know.";
         }
         else if (score > 21)
         {
-            finishingDialogue += "And You even managed to exceede my expectations!|" +
-                "For Your work I would give you a score of " + score + " out of 21 points!|" +
+            finishingDialogue += "And You even managed to exceed my expectations!|" +
+                "For Your work I will give You a score of " + score + " out of 21 points!|" +
                 "Now then... I will teach You everything I know.";
         }
         else
         {
-            finishingDialogue += "|For Your work I would give you a score of " + score + " out of 21 points.|" +
+            finishingDialogue += "|For Your work I will give You a score of " + score + " out of 21 points.|" +
                 "Now then... I will teach You everything I know.";
         }
 

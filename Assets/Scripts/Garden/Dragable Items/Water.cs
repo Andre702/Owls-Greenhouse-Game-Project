@@ -38,7 +38,7 @@ public class Water : DragableItem
     {
         base.BeginDragEffect();
 
-        if (canBeUsed & waterLevel > 10)    
+        if (canBeUsed & waterLevel >= 20)    
         {
             audioManager.PlaySFX(audioManager.water_barrel);
             RectTransform rectTransform = wateringCanImage.rectTransform;

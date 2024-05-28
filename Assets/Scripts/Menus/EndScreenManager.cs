@@ -21,14 +21,14 @@ public class EndScreenManager : CutsceneManager
         {
             flower.SetActive(true);
 
-            endScreenDialogue = "You begun studies beside you master the great Owl.\n" +
+            endScreenDialogue = "You begun studies beside your master the great Owl.\n" +
                 "You set out to become the greatest botanist that ever lived.|" +
-                "After many yers and many more tests you became a master of the green world, a beacon of science and discovery";
+                "After many years and many more tests you became a master of the green world, a beacon of science and discovery";
         }
         else
         {
             endScreenDialogue = "You failed to satisfy your teacher's desires, however your hopes have not been extinguished.|" +
-                "Some day You will try again and show the great Owl what you can really do.";
+                "Some day you will try again and show the great Owl what you can really do.";
         }
     }
 
