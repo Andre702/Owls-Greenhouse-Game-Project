@@ -226,7 +226,8 @@ public class GardenManager : MonoBehaviour
 
     public bool PlantAttemptToWater(int index)
     {
-        return GameData.instance.GetPlantData(index).AttemptToWater();
+        if (waterBarrel.GetWaterLevel() >= 20) return GameData.instance.GetPlantData(index).AttemptToWater();
+        return false;
     }
 
     public bool PlantAtemptRelocate()
