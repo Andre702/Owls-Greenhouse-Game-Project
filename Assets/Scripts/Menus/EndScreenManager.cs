@@ -5,6 +5,7 @@ using UnityEngine;
 public class EndScreenManager : CutsceneManager
 {
     public GameObject theEndTitle;
+    public Animator titleAnimator;
     public GameObject flower;
     private bool gameSuccessful = false;
 
@@ -13,6 +14,8 @@ public class EndScreenManager : CutsceneManager
     private void Start()
     {
         gameSuccessful = GameManager.instance.QuestUpdateCondition();
+        animator.SetTrigger("FadeIn");
+        DialogueManager.OnDialogueEnd += ProgressCutscene;
 
         if (gameSuccessful)
         {
@@ -24,7 +27,7 @@ public class EndScreenManager : CutsceneManager
         }
         else
         {
-            endScreenDialogue = "You failed to satisfy you teacher desires, however your hopes have not been extinguished.|" +
+            endScreenDialogue = "You failed to satisfy your teacher's desires, however your hopes have not been extinguished.|" +
                 "Some day You will try again and show the great Owl what you can really do.";
         }
     }
@@ -33,11 +36,13 @@ public class EndScreenManager : CutsceneManager
     {
         if (!dialogueFinished)
         {
+            dialogueFinished = true;
             dialogueBox.BeginDialogue(endScreenDialogue);
         }
         else
         {
-            
+            titleAnimator.SetTrigger("FadeIn");
+            theEndTitle.SetActive(true);
         }
     }
 

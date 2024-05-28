@@ -61,7 +61,7 @@ public class Water : DragableItem
 
         if (wasUsed)
         {
-            //waterLevel -= 20;
+            waterLevel -= 20;
             UpdateWaterLevel();
         }
     }

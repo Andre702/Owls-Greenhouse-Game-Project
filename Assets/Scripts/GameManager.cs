@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DataBase;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour
 
     public int[] quest = { 3, 2, 1 };
     public QuestBoard questBoard;
+
+    public CanvasGroup nightShade;
 
     public bool isSceneGarden = true;
 
@@ -62,6 +64,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void LockAllFunctionalities(bool locked)
+    {
+        nightShade.GetComponent<Image>().raycastTarget = locked;
+    }
+
     public bool QuestUpdateCondition()
     {
         int[] currentState = GameData.instance.CountAdultPlants();
@@ -77,7 +84,7 @@ public class GameManager : MonoBehaviour
         bool endFlag = true;
         for (int i = 0; i < quest.Length; i++)
         {
-            if (currentState[i] != quest[i])
+            if (currentState[i] < quest[i])
             {
                 endFlag = false;
                 break;
@@ -143,6 +150,7 @@ public class GameManager : MonoBehaviour
         if (GameData.instance.hour <= 24)
         {
             GameData.instance.IncrementHour();
+            nightShade.alpha += 0.02f;
             PlantAllGrow();
             PlantAllCheckHappiness();
             Hud.instance.UpdateHourDisplay();
@@ -238,6 +246,9 @@ public class GameManager : MonoBehaviour
     public void SceneChangeEndScreen()
     {
         SceneManager.LoadScene(4);
+        Hud.instance.gameObject.SetActive(false);
+        nightShade.alpha = 0;
+        QuestBoardShow(false);
     }
 
     public void QuestBoardShow(bool show)
@@ -249,10 +260,11 @@ public class GameManager : MonoBehaviour
     {
         TimeStop();
         Hud.instance.ButtonsInteractable(false);
+        
 
         GameData.instance.gameFinished = true;
 
-        if (forced)
+        if (forced && SceneManager.GetActiveScene().buildIndex == 3)
         {
             SceneManager.LoadScene(2);
         }

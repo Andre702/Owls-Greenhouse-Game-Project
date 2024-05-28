@@ -41,6 +41,7 @@ public class GardenManager : MonoBehaviour
     {
         if (GameData.instance.gameStartedFirstTime)
         {
+            GameManager.instance.LockAllFunctionalities(true);
             BeginIntroductionDialogue();
         }
         else
@@ -58,66 +59,6 @@ public class GardenManager : MonoBehaviour
             waterBarrel.AddWater(
                 GameData.instance.GetPlayerWater())
             );
-    }
-
-    private void GoEndScreen()
-    {
-        DialogueManager.OnDialogueEnd -= GoEndScreen;
-
-        GameManager.instance.QuestBoardShow(false);
-
-        GameManager.instance.SceneChangeEndScreen();
-    }
-
-    private void FinishTheGame()
-    {
-        darkenedScreen.SetActive(true);
-
-        DialogueManager.OnDialogueEnd += GoEndScreen;
-
-        if (!GameManager.instance.QuestUpdateCondition())
-        {
-            owlDialogueBox.BeginDialogue("Well well the student returns at the end of the time I gave him...|" +
-                "I am sory my dear, but you failed to complete my task and thus I deam You not worthy of recieving my teachings.|" +
-                "Do not despair child. Learn more. Return to me in couple of years and take my test again. I will be waiting.");
-
-            return;
-        }
-
-        int score = 0;
-
-        foreach (Plant p in GameData.instance.GetAllPlants())
-        {
-            if (p.stage >= 5)
-            {
-                score += p.plantHealth;
-            }
-        }
-
-        GameData.instance.score += score;
-
-        string finishingDialogue = "It would seem the student returns... My student that is.|" +
-                "Congratulations my dear. You have passed my test. ";
-
-        if (score == 21)
-        {
-            finishingDialogue += "And with a perfect mark as well!|" +
-                "For Your work I would give you a perfect 21 out of 21 points.|" +
-                "Now then... I will teach You everything I know.";
-        }
-        else if (score > 21)
-        {
-            finishingDialogue += "And You even managed to exceede my expectations!|" +
-                "For Your work I would give you a score of " + score + " out of 21 points!|" +
-                "Now then... I will teach You everything I know.";
-        }
-        else
-        {
-            finishingDialogue += "|For Your work I would give you a score of " + score + " out of 21 points.|" +
-                "Now then... I will teach You everything I know.";
-        }
-
-        owlDialogueBox.BeginDialogue(finishingDialogue);
     }
 
     private void Update()
@@ -356,7 +297,6 @@ public class GardenManager : MonoBehaviour
 
     public void BeginIntroductionDialogue()
     {
-            //This is the longest text that can be displayed in thhe dialogue box. It is quite long and right now I am writing more just because I have a space for it. The space is ending soon so aaaa
         owlDialogueBox.BeginDialogue("Welcome to my Greenhouse. Here I will teach You everything I know... " +
             "\nIf You pass my test that is.|" +
             "The task I give You is: By the end of 24th hour You will need to grow specific plants in these pots You see in front of You.|" +
@@ -364,6 +304,14 @@ public class GardenManager : MonoBehaviour
             "\u200BIt may seem like a lot, however I allow You to ask me about any object you can see here. Simply click on me and point to an object You want to know more about.|" +
             "To decide if You are worth teaching I need to see how You use my knowledge and act acordingly.|" +
             "You should start by asking me about the seeds residing in slots at the bottom.");
+
+        DialogueManager.OnDialogueEnd += UnlockGardenObjects;
+    }
+
+    public void UnlockGardenObjects()
+    {
+        DialogueManager.OnDialogueEnd -= UnlockGardenObjects;
+        GameManager.instance.LockAllFunctionalities(false);
     }
 
     public bool UseClock()
@@ -419,6 +367,62 @@ public class GardenManager : MonoBehaviour
     {
         GameData.instance.SaveWaterLevel(waterBarrel.waterLevel);
         GameManager.instance.SceneChangeForest();
+    }
+    private void GoEndScreen()
+    {
+        DialogueManager.OnDialogueEnd -= GoEndScreen;
+
+        GameManager.instance.SceneChangeEndScreen();
+    }
+    private void FinishTheGame()
+    {
+        darkenedScreen.SetActive(true);
+
+        DialogueManager.OnDialogueEnd += GoEndScreen;
+
+        if (!GameManager.instance.QuestUpdateCondition())
+        {
+            owlDialogueBox.BeginDialogue("Well well the student returns at the end of the time I gave him...|" +
+                "I am sory my dear, but you failed to complete my task and thus I deam You unworthy of recieving my teachings.|" +
+                "Do not despair child. Learn more. Return to me in couple of years and take my test again. I will be waiting.");
+
+            return;
+        }
+
+        int score = 0;
+
+        foreach (Plant p in GameData.instance.GetAllPlants())
+        {
+            if (p.stage >= 5)
+            {
+                score += p.plantHealth;
+            }
+        }
+
+        GameData.instance.score += score;
+
+        string finishingDialogue = "It would seem the student returns... My student that is.|" +
+                "Congratulations my dear. You have passed my test. ";
+
+        if (score == 21)
+        {
+            finishingDialogue += "And with a perfect mark as well!|" +
+                "For Your work I would give you a perfect 21 out of 21 points.|" +
+                "Now then... I will teach You everything I know.";
+        }
+        else if (score > 21)
+        {
+            finishingDialogue += "And You even managed to exceede my expectations!|" +
+                "For Your work I would give you a score of " + score + " out of 21 points!|" +
+                "Now then... I will teach You everything I know.";
+        }
+        else
+        {
+            finishingDialogue += "|For Your work I would give you a score of " + score + " out of 21 points.|" +
+                "Now then... I will teach You everything I know.";
+        }
+
+        owlDialogueBox.BeginDialogue(finishingDialogue);
     }
 
     private void OnDestroy()

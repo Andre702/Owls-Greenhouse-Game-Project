@@ -123,6 +123,95 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &10762257
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 10762258}
+  - component: {fileID: 10762260}
+  - component: {fileID: 10762259}
+  - component: {fileID: 10762261}
+  m_Layer: 7
+  m_Name: NightShade
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &10762258
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 10762257}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1406232048}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &10762259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 10762257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.08414915, g: 0.10989449, b: 0.2924528, a: 0.39215687}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &10762260
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 10762257}
+  m_CullTransparentMesh: 1
+--- !u!225 &10762261
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 10762257}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &14606356
 GameObject:
   m_ObjectHideFlags: 0
@@ -1998,6 +2087,7 @@ MonoBehaviour:
   secondsInHour: 10
   quest: 030000000200000001000000
   questBoard: {fileID: 962910271}
+  nightShade: {fileID: 10762261}
   isSceneGarden: 1
 --- !u!4 &542731378
 Transform:
@@ -4159,16 +4249,12 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 1770b4f50531c96449c7bc897c3fa197, type: 3}
   - {fileID: 21300000, guid: d4a69993611f1e24c848a752cc52b563, type: 3}
   hour: 0
-  clockDescription: 'This is my special Magical Watch. It will skip exactly 1 hour
-    when used so be precise with it.
-
-    The watch is powered by the greenhouse
-    and it will not work outside of it.'
-  jarDescription: 'This is a Water Jug. You can use it to gather water from the nearby
-    lake and then pour it into the barrel.
-
-    It will not break but if you trip
-    and fall it will spill some water so be careful in the forest.'
+  clockDescription: it will not work outside of it.h. It will skip exactly 1 hour
+    when used so be precise with it.|The watch is powered by the greenhouse and it
+    will not work outside of it.
+  jarDescription: This is a Water Jug. You can use it to gather water from the nearby
+    lake and then pour it into the barrel.|It will not break but if you trip and
+    fall it will spill some water so be careful in the forest.
 --- !u!4 &1064574007
 Transform:
   m_ObjectHideFlags: 0
@@ -5369,6 +5455,7 @@ RectTransform:
   - {fileID: 1086768265}
   - {fileID: 1397274625}
   - {fileID: 962910270}
+  - {fileID: 10762258}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
