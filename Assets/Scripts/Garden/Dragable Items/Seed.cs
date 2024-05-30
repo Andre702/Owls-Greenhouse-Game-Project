@@ -19,7 +19,8 @@ public class Seed : DragableItem
         thisItemType = ItemType.Seed;
 
         itemExplanation = $"This is a {plantName.ToString()} seed. Drag and drop it into one of the pots to plant it." +
-            $"Take good care of each and every plant you grow. Remember to speak with them often to learn about their needs.";
+            $"Take good care of each and every plant you grow. |" +
+            $"Remember to speak with them often to learn about their needs.";
         
         canBeUsed = true; // Seeds need to check if they are unlocked at this game level
                           // and then determine weather or not they can be used yet

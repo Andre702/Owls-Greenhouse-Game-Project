@@ -4249,7 +4249,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 1770b4f50531c96449c7bc897c3fa197, type: 3}
   - {fileID: 21300000, guid: d4a69993611f1e24c848a752cc52b563, type: 3}
   hour: 0
-  clockDescription: it will not work outside of it.h. It will skip exactly 1 hour
+  clockDescription: This is my special Magical Watch. It will skip exactly 1 hour
     when used so be precise with it.|The watch is powered by the greenhouse and it
     will not work outside of it.
   jarDescription: This is a Water Jug. You can use it to gather water from the nearby
